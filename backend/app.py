@@ -1,4 +1,4 @@
-from apistar import App, Route
+from apistar import App
 from readit.routes import routes
 
 

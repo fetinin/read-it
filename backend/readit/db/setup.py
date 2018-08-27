@@ -1,5 +1,4 @@
 import mongoengine
-import asyncio
 
 
 def global_init():

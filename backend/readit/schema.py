@@ -1,4 +1,4 @@
-from apistar import types, validators, exceptions
+from apistar import types, validators
 
 
 class HasId(types.Type):

@@ -1,4 +1,3 @@
-from apistar import http
 
 from .schema import Book, BookDB
 from .models import BookMongo
