@@ -1,15 +1,28 @@
 from apistar import types, validators
 
 
-class HasId(types.Type):
+class HasID(types.Type):
     id = validators.String()
 
 
-class Book(types.Type):
-    title = validators.String(description="Book title.")
-    author = validators.String(description="Book author.", max_length=100)
-    content = validators.String(description="Book content.")
+class BookFields(types.Type):
+    title = validators.String(description="Book title.", allow_null=True)
+    author = validators.String(
+        description="Book author.", max_length=100, allow_null=True
+    )
 
 
-class BookDB(HasId, Book):
-    pass
+class BookContent(types.Type):
+    content = validators.Array(description="Book content.", items=validators.String())
+
+
+class BookNoContent(HasID, BookFields):
+    """A book without content"""
+
+
+class Book(HasID, BookFields, BookContent):
+    """Full book data from DB"""
+
+
+class BookWithFile(HasID, BookFields):
+    book_file = validators.String()

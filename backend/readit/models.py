@@ -1,10 +1,10 @@
+from __future__ import annotations
+
 import datetime
+from typing import Union
 
 from mongoengine import StringField, DateTimeField, ListField, Document
-
-from .db import global_init
-
-global_init()
+from mongoengine import errors as mongoerrors
 
 
 class BookMongo(Document):
@@ -15,3 +15,10 @@ class BookMongo(Document):
     author = StringField()
 
     meta = {"db_alias": "core", "collection": "books"}
+
+    @classmethod
+    def get_by_id(cls, id_: str) -> Union[BookMongo, None]:
+        try:
+            return cls.objects.with_id(id_)
+        except mongoerrors.ValidationError:
+            return None

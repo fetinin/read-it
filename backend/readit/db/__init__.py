@@ -1,1 +1,1 @@
-from .setup import global_init
+from .setup import db_init
