@@ -6,6 +6,7 @@ import Books from './views/Books.vue';
 import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
+import UploadBook from './views/UploadBook.vue';
 
 Vue.use(Router);
 
@@ -32,6 +33,11 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: Signup,
+    },
+    {
+      path: '/upload-book',
+      name: 'uploadBook',
+      component: UploadBook,
     },
     {
       path: '/books/:bookID',

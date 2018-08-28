@@ -4,6 +4,7 @@
     <router-link class="btn btn-link" to='/books'>Книги</router-link>
     <router-link class="btn btn-link" to='/login'>Login</router-link>
     <router-link class="btn btn-link" to='/signup'>Sign Up</router-link>
+    <router-link class="btn btn-link" to='/upload-book'>Upload</router-link>
   </section>
   <section class="navbar-center">ReadIT</section>
   <section class="navbar-section">
