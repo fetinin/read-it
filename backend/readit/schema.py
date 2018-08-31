@@ -24,5 +24,8 @@ class Book(HasID, BookFields, BookContent):
     """Full book data from DB"""
 
 
-class BookWithFile(HasID, BookFields):
-    book_file = validators.String()
+class BookWithFile(BookFields):
+    """Create book schema"""
+
+    file = validators.String(description="Book content as binary string.")
+    format = validators.String(description="Book format.")
