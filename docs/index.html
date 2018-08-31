@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	    <title>API Star</title>
+
+        <link href="apistar/css/bootstrap.min.css" rel="stylesheet">
+        <link href="apistar/css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="apistar/css/base.css" rel="stylesheet">
+        <link href="apistar/css/jquery.json-view.min.css" rel="stylesheet">
+        <link href="apistar/img/favicon.ico" rel="shortcut icon">
+
+        
+
+    </head>
+
+    <body data-spy="scroll" data-target="#sidebar-nav" data-offset="50">
+
+        <div class="sidebar">
+    <h3 class="brand">
+        <a class="navbar-brand" href="#">API Star</a>
+        <!-- <a href="#">API Star</a> -->
+    </h3>
+
+    <select class="menu-context-mobile">
+        <option value="" selected="selected">Go to...</option>
+        
+        
+            <optgroup label="Links">
+                
+                    <option value="#list_books">list_books</option>
+                
+                    <option value="#create_book">create_book</option>
+                
+                    <option value="#get_book">get_book</option>
+                
+                    <option value="#update_book">update_book</option>
+                
+            </optgroup>
+        
+    </select>
+    <div class="menu-list">
+        
+         
+            <ul class="menu-content">
+                
+                <li>
+                    <a href="#list_books">list_books</a>
+                </li>
+                
+                <li>
+                    <a href="#create_book">create_book</a>
+                </li>
+                
+                <li>
+                    <a href="#get_book">get_book</a>
+                </li>
+                
+                <li>
+                    <a href="#update_book">update_book</a>
+                </li>
+                
+            </ul>
+         
+    </div>
+</div>
+
+        <div class="container" id="main">
+            <div class="row">
+                <div class="col-md-12 main-container">
+                    <div class="row">
+    <div class="col-md-6 intro-title">
+        
+    </div>
+    <div class="col-md-6 source-code-chooser">
+            
+                <ul class="nav nav-pills" id="language-control">
+                    
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" data-language="javascript">javascript</a>
+                        </li>
+                    
+                        <li class="nav-item">
+                            <a href="#" class="nav-link " data-language="python">python</a>
+                        </li>
+                    
+                </ul>
+            
+        </ul>
+    </div>
+</div>
+<div class="row intro">
+<div class="col-md-6 offset-md-6 section-secondary">
+    
+        
+        
+        
+    
+        
+        
+        <!--<pre class="highlight python d-none" data-language="python"><code># Install the `requests` package.
+$ pip install requests</code></pre>-->
+    
+</div>
+</div>
+
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="list_books" class="coredocs-link-title">list_books <a href="#list_books"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">GET</span>
+            <code>/books</code>
+        </div>
+
+        
+
+
+
+    <h4>Query Parameters</h4>
+    <p>The following parameters should be included as part of a URL query string.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>limit</code></td><td></td></tr>
+            
+            <tr><td class="parameter-name"><code>offset</code></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books");
+var options = {
+    method: "GET"
+};
+url.search = new URLSearchParams({
+    limit: ...,
+    offset: ...
+});
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/books"
+params = {
+    "limit": ...,
+    "offset": ...
+}
+
+response = requests.get(url, params=params)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="create_book" class="coredocs-link-title">create_book <a href="#create_book"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">POST</span>
+            <code>/books</code>
+        </div>
+
+        
+
+
+
+
+    
+    
+    <h4>Request Body</h4>
+    <p>The request body should be <code>"application/json"</code> encoded, and should contain an object with the following attributes.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+                
+                    <tr><td class="parameter-name"><code>title</code></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>author</code></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>file</code> <span class="label label-warning">required</span></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>format</code> <span class="label label-warning">required</span></td><td></td></tr>
+                
+            
+        </tbody>
+    </table>
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books");
+var data = {
+    title: ...,
+    author: ...,
+    file: ...,
+    format: ...
+};
+var options = {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+        "content-type": "application/json"
+    }
+};
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/books"
+data = {
+    "title": ...,
+    "author": ...,
+    "file": ...,
+    "format": ...
+}
+
+response = requests.post(url, json=data)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="get_book" class="coredocs-link-title">get_book <a href="#get_book"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">GET</span>
+            <code>/books/{book_id}</code>
+        </div>
+
+        
+
+
+    <h4>Path Parameters</h4>
+    <p>The following parameters should be included in the URL path.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>book_id</code> <span class="label label-warning">required</span></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books/{book_id}");
+var options = {
+    method: "GET"
+};
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/books/{book_id}"
+
+response = requests.get(url)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="update_book" class="coredocs-link-title">update_book <a href="#update_book"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">PATCH</span>
+            <code>/books/{book_id}</code>
+        </div>
+
+        
+
+
+    <h4>Path Parameters</h4>
+    <p>The following parameters should be included in the URL path.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>book_id</code> <span class="label label-warning">required</span></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+    
+    
+    <h4>Request Body</h4>
+    <p>The request body should be <code>"application/json"</code> encoded, and should contain an object with the following attributes.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+                
+                    <tr><td class="parameter-name"><code>title</code></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>author</code></td><td></td></tr>
+                
+            
+        </tbody>
+    </table>
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books/{book_id}");
+var data = {
+    title: ...,
+    author: ...
+};
+var options = {
+    method: "PATCH",
+    body: JSON.stringify(data),
+    headers: {
+        "content-type": "application/json"
+    }
+};
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/books/{book_id}"
+data = {
+    "title": ...,
+    "author": ...
+}
+
+response = requests.patch(url, json=data)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+<div class="modal fade auth-modal auth-token" id="auth_token_modal" tabindex="-1" role="dialog" aria-labelledby="token authentication modal">
+<div class="modal-dialog modal-md" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fa fa-key"></i> Token Authentication</h3>
+    </div>
+
+    <form class="form-horizontal authentication-token-form">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="prefix" class="col-sm-2 control-label">Scheme:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="scheme" placeholder="Bearer" aria-describedby="schemeHelpBlock" required>
+          <span id="schemeHelpBlock" class="help-block">Either a registered authentication scheme such as <code>Bearer</code>, or a custom schema such as <code>Token</code> or <code>JWT</code>.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="token" class="col-sm-2 control-label">Token:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="token" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="helpBlock" required>
+          <span id="tokenHelpBlock" class="help-block">A valid API token.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-primary">Use Token Authentication</button>
+    </div>
+    </form>
+
+  </div>
+</div>
+</div>
+        <!-- Modal -->
+<div class="modal fade auth-modal auth-basic" id="auth_basic_modal" tabindex="-1" role="dialog" aria-labelledby="basic authentication modal">
+<div class="modal-dialog modal-md" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fa fa-key"></i> Basic Authentication</h3>
+    </div>
+
+    <form class="form-horizontal authentication-basic-form">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="authorization" class="col-sm-2 control-label">Username:</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="authorization" class="col-sm-2 control-label">Password:</label>
+
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="password" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-primary">Use Basic Authentication</button>
+    </div>
+    </form>
+
+  </div>
+</div>
+</div>
+        <!-- Modal -->
+<div class="modal fade auth-modal auth-session" id="auth_session_modal" tabindex="-1" role="dialog" aria-labelledby="session authentication modal">
+<div class="modal-dialog modal-md" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fa fa-key"></i> Session Authentication</h3>
+    </div>
+
+    <form class="form-horizontal authentication-session-form">
+    <div class="modal-body">
+
+        <!--  if user.is_authenticated
+          <h4 class="text-center">You are logged in as  user.username .</h4>
+         else  -->
+
+          <div class="text-center">
+            <h4 class="text-center">You need to login to enable Session Authentication.</h4>
+          </div>
+        <!-- endif  -->
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <!--  if user.is_authenticated  -->
+        <button type="submit" class="btn btn-primary">Use Session Authentication</button>
+      <!--  endif  -->
+    </div>
+    </form>
+
+  </div>
+</div>
+</div>
+
+        <script src="apistar/js/jquery-1.10.2.min.js"></script>
+        <script src="apistar/js/bootstrap.min.js"></script>
+    </body>
+</html>
