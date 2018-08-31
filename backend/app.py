@@ -1,10 +1,17 @@
 from apistar import App
 
+from apistar_cors import CORSMixin
+
+
 from readit.db import db_init
 from readit.routes import routes
 
 
-app = App(routes=routes)
+class AppCORS(CORSMixin, App):
+    pass
+
+
+app = AppCORS(routes=routes)
 
 
 if __name__ == "__main__":
