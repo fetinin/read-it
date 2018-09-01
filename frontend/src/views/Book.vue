@@ -78,8 +78,6 @@ export default class BookView extends Vue {
   private mounted() {
     const bookID = this.$route.params.bookID;
     this.$http.get(`books/${bookID}`).then((resp) => {
-      console.log('got book!');
-      console.log(resp.data);
       this.bookData = {
         id: resp.data.book,
         author: resp.data.author,

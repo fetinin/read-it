@@ -2,7 +2,9 @@
     <div class="book-cover card">
         <router-link :to="{name: 'book', params: { bookID: book.id }}">
         <div class="card-image">
-            <img :src="book.coverURL" :alt="book.title" class="img-responsive">
+          <object :data="book.coverURL" class="img-responsive">
+            <img src="https://via.placeholder.com/200x300" :alt="book.title" class="img-responsive">
+          </object>
         </div>
         <div class="card-header">
             <div class="card-title h6">{{ book.title }}</div>
@@ -34,7 +36,8 @@ a {
 .card-image:first-child {
   padding-top: 10px;
 }
-.card-image > img {
+.card-image > object,
+.card-image img {
   margin: auto;
   height: 100%;
   max-height: 300px;
