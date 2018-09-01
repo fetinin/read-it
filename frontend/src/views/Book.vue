@@ -21,12 +21,16 @@ import { Book } from '@/types';
   },
 })
 export default class BookView extends Vue {
-  @Prop({ required: true, type: Number })
-  public bookID!: number;
-
-  public book!: Book;
+  public bookData = {};
   public currentPage = 1;
-  public pageTotal = 0;
+
+  public get book(): Book | object {
+    return this.bookData;
+  }
+
+  public get pageTotal(): number {
+    return 1;
+  }
 
   public nextPage() {
     const elem = this.$refs.content as HTMLElement;
@@ -69,15 +73,24 @@ export default class BookView extends Vue {
   }
 
   private created() {
-    this.book = books[this.bookID - 1];
-    this.book.text = this.book ? this.book.text.replace('\n', '<br>') : '';
     document.addEventListener('keydown', this.handleKeyPress);
   }
   private mounted() {
+    const bookID = this.$route.params.bookID;
+    this.$http.get(`books/${bookID}`).then((resp) => {
+      console.log('got book!');
+      console.log(resp.data);
+      this.bookData = {
+        id: resp.data.book,
+        author: resp.data.author,
+        title: resp.data.title,
+        text: resp.data.pages[0].replace('\n', '<br>'),
+        coverURL: resp.data.cover,
+      };
+    });
+
     const contentWidth = (this.$refs.content as HTMLElement).offsetWidth;
     const textWidth = (this.$refs.text as HTMLElement).offsetHeight;
-    this.pageTotal = 1 + Math.round(textWidth / (contentWidth + 500));
-    console.log(this.book.text.length);
   }
 
   private destroyed() {

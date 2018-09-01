@@ -43,13 +43,7 @@ export default new Router({
       path: '/books/:bookID',
       name: 'book',
       component: Book,
-      props: (route) => ({ bookID: Number(route.params.bookID) }),
-      beforeEnter: (to, from, next) => {
-        if (Number.isInteger(Number(to.params.bookID))) {
-          return next();
-        }
-        return next(false);
-      },
+      props: (route) => ({ bookID: route.params.bookID }),
     },
   ],
 });
