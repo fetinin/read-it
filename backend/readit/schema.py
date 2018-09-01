@@ -16,7 +16,7 @@ class BookFields(types.Type):
 
 
 class BookContent(types.Type):
-    content = validators.Array(description="Book content.", items=validators.String())
+    pages = validators.Array(description="Book content.", items=validators.String())
 
 
 class BookNoContent(HasID, BookFields):

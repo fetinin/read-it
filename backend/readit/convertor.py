@@ -3,6 +3,8 @@ import subprocess
 import tempfile
 from typing import ClassVar, Dict, List
 
+from chardet import UniversalDetector
+
 from .helpers import sliced
 
 
@@ -26,8 +28,10 @@ class Converter:
         try:
             self.converter: ConverterPluginType = self._converters[converter_type]
         except KeyError:
-            raise UnsupportedFormatError(f"{converter_type} format is not supported. "
-                                         f"Choose one of: {self._converters.keys()}.")
+            raise UnsupportedFormatError(
+                f"{converter_type} format is not supported. "
+                f"Choose one of: {self._converters.keys()}."
+            )
 
     @classmethod
     def add_converter(cls, fmt: str):
@@ -44,9 +48,23 @@ class Converter:
 
 @Converter.add_converter("txt")
 class _TextConverter:
+    page_length = 5000  # chars
+
     @staticmethod
-    def convert(content: bytes) -> List[str]:
-        return list(sliced(content.decode("utf-8"), 250))
+    def _get_encoding(content: bytes) -> str:
+        detector = UniversalDetector()
+        for line in sliced(content, 250):
+            detector.feed(line)
+            if detector.done:
+                break
+        detector.close()
+        return detector.result["encoding"]
+
+    @classmethod
+    def convert(cls, content: bytes) -> List[str]:
+        encoding = cls._get_encoding(content)
+        # todo: be smarter with page breaks, do not cut words
+        return list(sliced(str(content, encoding), cls.page_length))
 
 
 @Converter.add_converter("pdf")
@@ -58,7 +76,8 @@ class _PDFConverter:
             out_name = tmp.name + ".txt"
             try:
                 res = subprocess.run(
-                    f"pdftotext -eol unix -layout {tmp.name} {out_name}".split(" "))
+                    f"pdftotext -eol unix -layout {tmp.name} {out_name}".split(" ")
+                )
             except subprocess.CalledProcessError as err:
                 raise ConvertError(f"Failed to convert file. {res.stdout}") from err
             try:

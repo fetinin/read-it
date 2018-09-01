@@ -1,3 +1,5 @@
+import os
+
 from apistar import App
 
 from apistar_cors import CORSMixin
@@ -16,4 +18,4 @@ app = AppCORS(routes=routes)
 
 if __name__ == "__main__":
     db_init()
-    app.serve("127.0.0.1", 5000, debug=True)
+    app.serve("127.0.0.1", 5000, debug=os.environ.get("APP_DEBUG", False))

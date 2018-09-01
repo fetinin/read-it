@@ -5,7 +5,6 @@ from apistar import http
 from typing import List
 
 from apistar.exceptions import NotFound
-
 from .convertor import Converter
 from . import schema
 from .models import Book
@@ -20,7 +19,7 @@ def list_books(
         schema.BookNoContent(
             id=str(book.id), title=book.title, author=book.author, cover=book.cover
         )
-        for book in Book.objects.exclude("content")[offset:limit]
+        for book in Book.objects.exclude("pages")[offset:limit]
     ]
 
 
@@ -32,7 +31,7 @@ def get_book(book_id: str) -> schema.Book:
         id=str(book.id),
         title=book.title,
         author=book.author,
-        content=book.content,
+        pages=book.pages,
         cover=book.cover,
     )
 
@@ -49,8 +48,8 @@ def create_book(book_data: schema.BookWithFile) -> schema.HasID:
     book = Book(
         title=book_data.title,
         author=book_data.author,
-        content=pages,
+        pages=pages,
         cover=book_data.cover,
     )
     book.save()
-    return schema.HasID(id=book.id)
+    return schema.HasID(id=str(book.id))

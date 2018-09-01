@@ -11,7 +11,7 @@ class Book(Document):
     created_date = DateTimeField(default=datetime.datetime.now)
 
     title = StringField()
-    content = ListField(StringField())
+    pages = ListField(StringField())
     author = StringField()
     cover = StringField()
 
