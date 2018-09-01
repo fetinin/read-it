@@ -10,6 +10,9 @@ class BookFields(types.Type):
     author = validators.String(
         description="Book author.", max_length=100, allow_null=True
     )
+    cover = validators.String(
+        description="Book cover image as base64.", allow_null=True
+    )
 
 
 class BookContent(types.Type):
@@ -27,5 +30,5 @@ class Book(HasID, BookFields, BookContent):
 class BookWithFile(BookFields):
     """Create book schema"""
 
-    file = validators.String(description="Book content as binary string.")
+    file = validators.String(description="Book content as base64 string.")
     format = validators.String(description="Book format.")
