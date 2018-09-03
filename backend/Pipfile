@@ -8,6 +8,7 @@ apistar = "*"
 mongoengine = "*"
 apistar-cors = "*"
 chardet = "*"
+bleach = "*"
 
 [dev-packages]
 cookiecutter = "*"

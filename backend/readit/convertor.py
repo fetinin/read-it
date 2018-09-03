@@ -1,8 +1,10 @@
+import datetime
 import os
 import subprocess
 import tempfile
 from typing import ClassVar, Dict, List
 
+import bleach
 from chardet import UniversalDetector
 
 from .helpers import sliced
@@ -43,7 +45,8 @@ class Converter:
         return wrapper
 
     def convert(self, content: bytes) -> List[str]:
-        return self.converter.convert(content)
+        pages = self.converter.convert(content)
+        return [bleach.clean(page) for page in pages]
 
 
 @Converter.add_converter("txt")
@@ -53,9 +56,10 @@ class _TextConverter:
     @staticmethod
     def _get_encoding(content: bytes) -> str:
         detector = UniversalDetector()
-        for line in sliced(content, 250):
+        timeout = datetime.datetime.now() + datetime.timedelta(seconds=5)
+        for line in sliced(content, 2500):
             detector.feed(line)
-            if detector.done:
+            if detector.done or datetime.datetime.now() > timeout:
                 break
         detector.close()
         return detector.result["encoding"]
@@ -69,11 +73,11 @@ class _TextConverter:
 
 @Converter.add_converter("pdf")
 class _PDFConverter:
-    @staticmethod
-    def convert(text: bytes) -> List[str]:
+    @classmethod
+    def _extract_text(cls, text: bytes) -> str:
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(text)
-            out_name = tmp.name + ".txt"
+            out_name = f"{tmp.name}.txt"
             try:
                 res = subprocess.run(
                     f"pdftotext -eol unix -layout {tmp.name} {out_name}".split(" ")
@@ -82,6 +86,11 @@ class _PDFConverter:
                 raise ConvertError(f"Failed to convert file. {res.stdout}") from err
             try:
                 with open(out_name) as out:
-                    return out.read().split("\f")
+                    return out.read()
             finally:
                 os.remove(out_name)
+
+    @classmethod
+    def convert(cls, data: bytes) -> List[str]:
+        text = cls._extract_text(data)
+        return text.strip().split("\f")
