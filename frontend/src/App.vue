@@ -24,6 +24,7 @@ export default class App extends Vue {}
 
 <style>
 #nav {
+  height: 70px;
   width: 60vw;
   margin: auto;
   padding-top: 10px;
@@ -31,6 +32,7 @@ export default class App extends Vue {}
 }
 #page-content {
   display: flex;
+  height: 90vh;
 }
 .text-grey {
   color: #acb3c2;
@@ -39,5 +41,10 @@ export default class App extends Vue {}
   #nav {
     width: 100vw;
   }
+}
+html,
+body,
+#app {
+  height: 100%;
 }
 </style>

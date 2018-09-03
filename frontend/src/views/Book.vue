@@ -1,10 +1,12 @@
 <template>
     <div class="book container">
-        <div class="text col-mx-auto" @wheel="handleScroll" ref="content">
-            <p class="title">{{book.title}} - {{book.author}}</p>
-            <div v-html="book.text" ref="text"></div>
-        </div>
-        <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
+        <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
+          <p class="title">{{book.title}} - {{book.author}}</p>
+          <transition name="fade" mode="out-in">
+            <p class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></p>
+          </transition>
+          <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
+      </div>
     </div>
 </template>
 
@@ -21,39 +23,25 @@ import { Book } from '@/types';
   },
 })
 export default class BookView extends Vue {
-  public bookData = {};
+  public bookData: Book = { id: '', title: '', author: '', pages: [], coverURL: '' };
   public currentPage = 1;
 
-  public get book(): Book | object {
+  public get book(): Book {
     return this.bookData;
   }
 
   public get pageTotal(): number {
-    return 1;
+    return this.book.pages.length;
   }
 
   public nextPage() {
-    const elem = this.$refs.content as HTMLElement;
-    const offset = elem.offsetWidth + 500;
-    const prevStep = !['', null].includes(elem.style.left)
-      ? parseInt(elem.style.left as string, 10)
-      : 0;
-    const step = prevStep - offset;
-    // if (Math.abs(step + offset) < (this.$refs.text as HTMLElement).offsetHeight) {
-    elem.style.cssText = `left: ${step}px`;
-    this.currentPage += 1;
-    // }
+    if (this.currentPage < this.pageTotal) {
+      this.currentPage += 1;
+    }
   }
 
   public prevPage() {
-    const elem = this.$refs.content as HTMLElement;
-    let step = elem.offsetWidth + 500;
-    const prevStep = !['', null].includes(elem.style.left)
-      ? parseInt(elem.style.left as string, 10)
-      : 0;
-    step = prevStep + step;
-    if (step <= 0) {
-      elem.style.cssText = `left: ${step}px`;
+    if (this.currentPage > 1) {
       this.currentPage -= 1;
     }
   }
@@ -82,13 +70,12 @@ export default class BookView extends Vue {
         id: resp.data.book,
         author: resp.data.author,
         title: resp.data.title,
-        text: resp.data.pages[0].replace('\n', '<br>'),
+        pages: resp.data.pages.map((el: any): string => {
+          return el.replace(/\n/g, '<br>');
+        }),
         coverURL: resp.data.cover,
       };
     });
-
-    const contentWidth = (this.$refs.content as HTMLElement).offsetWidth;
-    const textWidth = (this.$refs.text as HTMLElement).offsetHeight;
   }
 
   private destroyed() {
@@ -97,21 +84,28 @@ export default class BookView extends Vue {
 }
 </script>
 <style scoped>
-.text {
-  max-height: 90vh;
-  column-gap: 500px;
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+.pages {
+  height: 90vh;
   word-wrap: break-word;
-  column-width: 90vw;
-  width: 85%;
-  position: relative;
-  transition: left 0.3s linear;
-  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.page-count {
-  position: fixed;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  bottom: -10px;
+.page {
+  font-family: 'Open Sans', sans-serif;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 960px;
+}
+/* Animation */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

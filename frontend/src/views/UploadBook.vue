@@ -14,18 +14,18 @@
               Перетащите вашу книгу сюда<br> или кликните чтобы открыть обозреватель
             </p>
             <p v-else>
-                {{bookFileName}}
+                {{bookFile.name}}
             </p>
         </div>
 
         <div class="dropbox">
           <input type="file" :disabled="isSaving" @change="onBookCoverUpload($event.target.files)"
             accept="image/*" class="input-file" id="book-cover">
-            <p v-if="!bookCoverFileName">
+            <p v-if="!bookCoverFile.name">
               Перетащите обложку книги сюда<br> или кликните чтобы открыть обозреватель
             </p>
             <p v-else>
-                {{bookCoverFileName}}
+                {{bookCoverFile.name}}
             </p>
         </div>
         <button class="btn btn-primary">Загрузить</button>

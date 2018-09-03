@@ -25,17 +25,21 @@ import { Book as BookType } from '@/types';
 export default class BooksVue extends Vue {
   public books: BookType[] = [];
   private created() {
-    this.$http.get('/books').then((resp) => {
-      this.books = resp.data.map((el: any): BookType => {
-        return {
-          id: el.id,
-          title: el.title,
-          author: el.author,
-          text: '',
-          coverURL: el.cover,
-        };
-      });
-    });
+    // this.books = bookData;
+    this.$http
+      .get('/books')
+      .then((resp) => {
+        this.books = resp.data.map((el: any): BookType => {
+          return {
+            id: el.id,
+            title: el.title,
+            author: el.author,
+            pages: [],
+            coverURL: el.cover,
+          };
+        });
+      })
+      .catch((err) => console.log(err.response));
   }
 }
 </script>

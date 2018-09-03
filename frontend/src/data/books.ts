@@ -1,7 +1,8 @@
 import { Book } from '@/types';
 
 /* tslint:disable */
-const txt = `— Eh bien, mon prince. Gênes et Lucques ne sont plus que des apanages, des поместья, de la famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre, si vous vous permettez encore de pallier toutes les infamies, toutes les atrocités de cet Antichrist (ma parole, j'y crois) — je ne vous connais plus, vous n'êtes plus mon ami, vous n'êtes plus мой верный раб, comme vous dites 1. Ну, здравствуйте, здравствуйте. Je vois que je vous fais peur 2, садитесь и рассказывайте.
+const txt = [
+  `— Eh bien, mon prince. Gênes et Lucques ne sont plus que des apanages, des поместья, de la famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre, si vous vous permettez encore de pallier toutes les infamies, toutes les atrocités de cet Antichrist (ma parole, j'y crois) — je ne vous connais plus, vous n'êtes plus mon ami, vous n'êtes plus мой верный раб, comme vous dites 1. Ну, здравствуйте, здравствуйте. Je vois que je vous fais peur 2, садитесь и рассказывайте.
 Так говорила в июле 1805 года известная Анна Павловна Шерер, фрейлина и приближенная императрицы Марии Феодоровны, встречая важного и чиновного князя Василия, первого приехавшего на ее вечер. Анна Павловна кашляла несколько дней, у нее был грипп, как она говорила (грипп был тогда новое слово, употреблявшееся только редкими). В записочках, разосланных утром с красным лакеем, было написано без различия во всех:
 «Si vous n'avez rien de mieux à faire, Monsieur le comte (или mon prince), et si la perspective de passer la soirée chez une pauvre malade ne vous effraye pas trop, je serai charmée de vous voir chez moi entre 7 et 10 heures. Annette Scherer» 3.
 — Dieu, quelle virulente sortie! 4 — отвечал, нисколько не смутясь такою встречей, вошедший князь, в придворном, шитом мундире, в чулках, башмаках и звездах, с светлым выражением плоского лица.
@@ -26,8 +27,8 @@ const txt = `— Eh bien, mon prince. Gênes et Lucques ne sont plus que des apa
 — Mais à propos de votre famille, — сказала она, — знаете ли, что ваша дочь, с тех пор как выезжает, fait les délices de tout le monde. On la trouve belle comme le jour 16.
 Князь наклонился в знак уважения и признательности.
 — Я часто думаю, — продолжала Анна Павловна после минутного молчания, придвигаясь к князю и ласково улыбаясь ему, как будто выказывая этим, что политические и светские разговоры кончены и теперь начинается задушевный, — я часто думаю, как иногда несправедливо распределяется счастие жизни. За что вам дала судьба таких двух славных детей (исключая Анатоля, вашего меньшого, я его не люблю, — вставила она безапелляционно, приподняв брови), — таких прелестных детей? А вы, право, менее всех цените их и потому их не сто́ите.
-И она улыбнулась своею восторженной улыбкой.
-— Que voulez-vous? Lafater aurait dit que je n'ai pas la bosse de la paternité 17, — сказал князь.
+И она улыбнулась своею восторженной улыбкой.`,
+  `— Que voulez-vous? Lafater aurait dit que je n'ai pas la bosse de la paternité 17, — сказал князь.
 — Перестаньте шутить. Я хотела серьезно поговорить с вами. Знаете, я недовольна вашим меньшим сыном. Между нами будь сказано (лицо ее приняло грустное выражение), о нем говорили у ее величества и жалеют вас...
 Князь не отвечал, но она молча, значительно глядя на него, ждала ответа. Князь Василий поморщился.
 — Что ж мне делать? — сказал он наконец. — Вы знаете, я сделал для их воспитания все, что может отец, и оба вышли des imbéciles 18. Ипполит, по крайней мере, покойный дурак, а Анатоль — беспокойный. Вот одно различие, — сказал он, улыбаясь более неестественно и одушевленно, чем обыкновенно, и при этом особенно резко выказывая в сложившихся около его рта морщинах что-то неожиданно-грубое и неприятное.
@@ -40,54 +41,55 @@ const txt = `— Eh bien, mon prince. Gênes et Lucques ne sont plus que des apa
 — Отец очень богат и скуп. Он живет в деревне. Знаете, этот известный князь Болконский, отставленный еще при покойном императоре и прозванный прусским королем. Он очень умный человек, но со странностями и тяжелый. La pauvre petite est malheureuse comme les pierres 24. У нее брат, вот что недавно женился на Lise Мейнен, адъютант Кутузова. Он будет нынче у меня.
 — Ecoutez, chère Annette 25, — сказал князь, взяв вдруг свою собеседницу за руку и пригибая ее почему-то книзу. — Arrangez-moi cette affaire et je suis votre вернейший раб à tout jamais (рап — comme mon староста m'écrit des 26 донесенья: покой-ер-п). Она хорошей фамилии и богата. Все, что мне нужно.
 И он с теми свободными и фамильярными грациозными движениями, которые его отличали, взял за руку фрейлину, поцеловал ее и, поцеловав, помахал фрейлинскою рукой, развалившись на креслах и глядя в сторону.
-— Attendez 27, — сказала Анна Павловна, соображая. — Я нынче же поговорю Lise (la femme du jeune Болконский) 28. И, может быть, это уладится. Ce sera dans votre famille que je ferai mon apprentissage de vieille fille 29.`;
+— Attendez 27, — сказала Анна Павловна, соображая. — Я нынче же поговорю Lise (la femme du jeune Болконский) 28. И, может быть, это уладится. Ce sera dans votre famille que je ferai mon apprentissage de vieille fille 29.`
+];
 /* tslint:enable */
 export default [
   {
-    id: 1,
+    id: '5b8aa071d06319534c12aa1q',
     title: 'Война и Мир',
     author: 'Л. А. Толстой',
     coverURL: 'https://s1.knigavuhe.ru/1/covers/8222/2-2.jpg',
-    text: txt,
+    pages: txt,
   },
   {
-    id: 2,
+    id: '5b8aa071d06319534c12aa1b',
     title: 'Texas Ranger ',
     author: 'James Patterson',
     coverURL:
       'http://covers1.booksamillion.com/covers/bam/0/31/655/666/0316556661_b.jpg',
-    text: txt,
+    pages: txt,
   },
   {
-    id: 3,
+    id: '5b8aa071d06319534c12aa1c',
     title: 'Paradox',
     author: 'Catherine Coulter ',
     coverURL:
       'http://covers3.booksamillion.com/covers/bam/1/50/113/812/150113812X_b.jpg',
-    text: txt,
+    pages: txt,
   },
   {
-    id: 4,
+    id: '5b8aa071d06319534c12aa1d',
     title: 'Serpentine',
     author: 'Laurell K. Hamilton',
     coverURL:
       'http://covers2.booksamillion.com/covers/bam/0/42/525/568/0425255689_b.jpg',
-    text: txt,
+    pages: txt,
   },
   {
-    id: 5,
+    id: '5b8aa071d06319534c12aa1e',
     title: 'Texas Ranger ',
     author: 'James Patterson',
     coverURL:
       'http://covers1.booksamillion.com/covers/bam/0/31/655/666/0316556661_b.jpg',
-    text: txt,
+    pages: txt,
   },
   {
-    id: 6,
+    id: '5b8aa071d06319534c12aa1f',
     title: 'Paradox',
     author: 'Catherine Coulter ',
     coverURL:
       'http://covers3.booksamillion.com/covers/bam/1/50/113/812/150113812X_b.jpg',
-    text: txt,
+    pages: txt,
   },
 ] as Book[];
