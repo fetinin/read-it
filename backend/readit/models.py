@@ -10,9 +10,9 @@ from mongoengine import errors as mongoerrors
 class Book(Document):
     created_date = DateTimeField(default=datetime.datetime.now)
 
-    title = StringField()
+    title = StringField(max_length=50)
     pages = ListField(StringField())
-    author = StringField()
+    author = StringField(max_length=50)
     cover = StringField()
 
     meta = {"db_alias": "core", "collection": "books"}
