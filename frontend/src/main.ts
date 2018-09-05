@@ -1,4 +1,5 @@
 import 'spectre.css';
+import 'spectre.css/dist/spectre-icons.css';
 
 import axios from 'axios';
 import Vue from 'vue';
@@ -9,6 +10,7 @@ import router from './router';
 import store from './store';
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000';
+axios.defaults.timeout = 10000; // ms
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);

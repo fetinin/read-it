@@ -2,7 +2,8 @@
   <div class="books container grid-xl">
     <div class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
-      v-for="book in books"
+      @deleted="onBookDelete(id)"
+      v-for="(book, id) in books"
       :key="book.id"
       :book="book">
       </BookCover>
@@ -24,6 +25,11 @@ import { Book as BookType } from '@/types';
 })
 export default class BooksVue extends Vue {
   public books: BookType[] = [];
+
+  private onBookDelete(bookID: number) {
+    this.books.splice(bookID, 1);
+  }
+
   private created() {
     // this.books = bookData;
     this.$http
@@ -39,7 +45,7 @@ export default class BooksVue extends Vue {
           };
         });
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => console.log(err.response ? err.response : err));
   }
 }
 </script>

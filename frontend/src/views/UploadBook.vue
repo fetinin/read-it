@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { File } from '@/types.ts';
 
 const STATUS = {
   INITIAL: 0,
@@ -42,11 +43,6 @@ const STATUS = {
   SUCCESS: 2,
   FAILED: 3,
 };
-
-interface File {
-  name: string;
-  reader: FileReader;
-}
 
 @Component({
   components: {},
@@ -81,7 +77,6 @@ export default class BookUpload extends Vue {
         cover: this.bookCoverFile.reader.result,
       })
       .then((response) => {
-        console.log('success!');
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
       .catch((err) => console.log(err.response));
