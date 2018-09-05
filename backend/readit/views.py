@@ -53,3 +53,10 @@ def create_book(book_data: schema.BookWithFile) -> schema.HasID:
     )
     book.save()
     return schema.HasID(id=str(book.id))
+
+
+def delete_book(book_id: str):
+    book = Book.get_by_id(book_id)
+    if not book:
+        raise NotFound()
+    book.delete()
