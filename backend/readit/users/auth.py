@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from collections import namedtuple
-
+import base64
 import requests
 from enum import IntEnum
 from typing import ClassVar, Dict, Type, Tuple, Optional
 from readit import settings
 
-User = namedtuple("User", "name surname id")
+User = namedtuple("User", "name surname id avatar")
 
 
 class AuthTypes(IntEnum):
@@ -77,8 +77,18 @@ class VKClient(AuthClientBase):
         if self._user is None:
             data = requests.get(
                 "https://api.vk.com/method/users.get",
-                params={"access_token": self.token, "v": self.api_version},
+                params={
+                    "fields": "photo_50, has_photo",
+                    "access_token": self.token,
+                    "v": self.api_version,
+                },
             ).json()
             user = data["response"][0]
-            self._user = User(user["first_name"], user["last_name"], str(user["id"]))
+            if user["has_photo"]:
+                photo = base64.b64encode(requests.get(user["photo_50"]).content)
+            else:
+                photo = ""
+            self._user = User(
+                user["first_name"], user["last_name"], str(user["id"]), photo
+            )
         return self._user

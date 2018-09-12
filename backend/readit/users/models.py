@@ -10,6 +10,7 @@ class User(Document):
 
     name = StringField(max_length=50, required=True)
     surname = StringField(max_length=50)
+    avatar = StringField()
     external_id = StringField(required=True)
     auth_type = IntField(required=True)
 

@@ -5,3 +5,4 @@ class User(types.Type):
     id = validators.String()
     name = validators.String()
     surname = validators.String()
+    avatar = validators.String()

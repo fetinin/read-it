@@ -26,6 +26,7 @@ def auth_user(auth_service_name: str, code: http.QueryParam, path: http.Path):
             surname=auth_client.user.surname,
             external_id=auth_client.user.id,
             auth_type=auth_type.value,
+            avatar=auth_client.user.avatar,
         )
         user.save()
     token = jwt.encode({"userID": str(user.id)}, key=settings.Secrets.jwt_sign)
@@ -39,4 +40,6 @@ def auth_user(auth_service_name: str, code: http.QueryParam, path: http.Path):
 
 def get_user(user_id: str) -> schema.User:
     user = User.objects.with_id(user_id)
-    return schema.User(id=str(user.id), name=user.name, surname=user.surname)
+    return schema.User(
+        id=str(user.id), name=user.name, surname=user.surname, avatar=user.avatar
+    )
