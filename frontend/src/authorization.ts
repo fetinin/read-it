@@ -10,8 +10,11 @@ interface TokenData {
 
 export const authorize = (token: string) => {
   const data: TokenData = jwt_decode(token);
-  axios.get(`/users/${data.userID}`).then((resp) => {
-    const user: User = resp.data;
-    store.dispatch('saveUser', user);
-  });
+  axios
+    .get(`/users/${data.userID}`)
+    .then((resp) => {
+      const user: User = resp.data;
+      store.dispatch('saveUser', user);
+    })
+    .catch((err) => console.error(err));
 };

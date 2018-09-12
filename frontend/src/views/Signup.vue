@@ -4,19 +4,29 @@
         <h2 class="header">Регистрация</h2>
         <p class="note">Войдите с помощью учетной записи в других сервисах</p>
         <div class="auth-services">
-          <span v-for="auth in 3" :key="auth" class='auth-service'>
-          <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
-          <img src="../assets/ghub-icon-w-64.png" alt="">
-          </a>
-        </span>
+            <span class='auth-service'>
+            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+              <img src="../assets/vk-logo.png" alt="">
+            </a>
+          </span>
+          <span class='auth-service'>
+            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+              <img src="../assets/google-logo.png" alt="">
+            </a>
+          </span>
+          <span class='auth-service'>
+            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+              <img src="../assets/ghub-icon-w-64.png" alt="">
+            </a>
+          </span>
         </div>
         
-        <hr>
+        <!-- <hr>
         <label class="form-label" for="login">Логин</label>
         <input v-model="login" class="form-input" type="text" id="login" placeholder="AlanParrish26">
         <label class="form-label" for="password">Пароль</label>
         <input v-model='password' class="form-input" type="password" id="password" placeholder="jYOUmanji">
-        <button class="btn btn-primary">Зарегистрироваться</button>
+        <button class="btn btn-primary">Зарегистрироваться</button> -->
     </form>
 </div>
 </template>
@@ -43,7 +53,7 @@ export default class Signup extends Vue {
   justify-content: space-evenly;
 }
 .login-form {
-  margin: auto;
+  margin: 25px auto 0 auto;
 }
 .note {
   color: #acb3c2;
@@ -57,6 +67,7 @@ button {
 .auth-service img {
   border-radius: 35px;
   background-color: #acb3c2;
+  width: 64px;
 }
 .auth-service img:hover {
   border-radius: 35px;
