@@ -7,14 +7,15 @@ from apistar_cors import CORSMixin
 
 from readit.db import db_init
 from readit.event_hooks import hooks
-from readit.books import routes as book_routes
+from readit.books.routes import routes as book_routes
+from readit.users.routes import routes as user_routes
 
 
 class AppCORS(CORSMixin, App):
     pass
 
 
-app = AppCORS(routes=book_routes, event_hooks=hooks)
+app = AppCORS(routes=book_routes + user_routes, event_hooks=hooks)
 
 
 if __name__ == "__main__":

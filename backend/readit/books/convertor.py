@@ -2,12 +2,12 @@ import datetime
 import os
 import subprocess
 import tempfile
-from typing import ClassVar, Dict, List
+from typing import ClassVar, Dict, List, Type
 
 import bleach
 from chardet import UniversalDetector
 
-from .helpers import sliced
+from readit.helpers import sliced
 
 
 class UnsupportedFormatError(Exception):
@@ -35,18 +35,23 @@ class Converter:
                 f"Choose one of: {self._converters.keys()}."
             )
 
+    @staticmethod
+    def _sanitize(text: str):
+        """Escape html tags"""
+        return bleach.clean(text)
+
     @classmethod
     def add_converter(cls, fmt: str):
         """Add converter class to the list of available converters"""
 
-        def wrapper(converter: ConverterPluginType):
+        def wrapper(converter: Type[ConverterPluginType]):
             cls._converters[fmt] = converter
 
         return wrapper
 
     def convert(self, content: bytes) -> List[str]:
         pages = self.converter.convert(content)
-        return [bleach.clean(page) for page in pages]
+        return [self._sanitize(page) for page in pages]
 
 
 @Converter.add_converter("txt")
