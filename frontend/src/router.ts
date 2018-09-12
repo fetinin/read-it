@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import { authorize } from './authorization';
 import Book from './views/Book.vue';
 import Books from './views/Books.vue';
 import Home from './views/Home.vue';
@@ -44,6 +45,16 @@ export default new Router({
       name: 'book',
       component: Book,
       props: (route) => ({ bookID: route.params.bookID }),
+    },
+    {
+      path: '/authenticated/',
+      name: 'auth',
+      beforeEnter: (to, from, next) => {
+        if (to.query.access_token) {
+          authorize(to.query.access_token);
+        }
+        return next({ name: 'books' });
+      },
     },
   ],
 });

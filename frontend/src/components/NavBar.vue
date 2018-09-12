@@ -6,13 +6,18 @@
   </section>
   <section class="navbar-center">ReadIT</section>
   <section class="navbar-section">
-    <router-link class="btn btn-link" to='/login'>Login</router-link>
+    <template v-if="user">
+      <a @click.prevent="logout" href="#logout" class="btn btn-link">Logout</a>
+      <div class="user">
+        <figure class="avatar avatar-lg" :data-initial="user.name[0].toUpperCase()" style="background-color: #5755d9;">
+          <img v-if="user.profilePic" :src="user.profilePic" alt="Avatar">
+        </figure>
+      </div>
+    </template>
+    <template v-else>
+      <router-link class="btn btn-link" to='/login'>Login</router-link>
     <router-link class="btn btn-link" to='/signup'>Sign Up</router-link>
-    <div class="user">
-      <figure class="avatar avatar-lg" :data-initial="user.name[0].toUpperCase()" style="background-color: #5755d9;">
-        <img v-if="user.profilePic" :src="user.profilePic" alt="Avatar">
-      </figure>
-    </div>
+    </template>
   </section>
 </header>
 </template>
@@ -24,12 +29,10 @@ import { User } from '@/types';
 @Component
 export default class NavBar extends Vue {
   get user(): User {
-    return {
-      id: '123rweg453267yer',
-      name: 'Denis',
-      token: '1328432tq34yterhErfawerq2t',
-      profilePic: '',
-    };
+    return this.$store.state.user;
+  }
+  private logout() {
+    this.$store.dispatch('deleteUser');
   }
 }
 </script>

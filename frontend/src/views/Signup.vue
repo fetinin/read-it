@@ -5,7 +5,7 @@
         <p class="note">Войдите с помощью учетной записи в других сервисах</p>
         <div class="auth-services">
           <span v-for="auth in 3" :key="auth" class='auth-service'>
-          <a href="">
+          <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
           <img src="../assets/ghub-icon-w-64.png" alt="">
           </a>
         </span>

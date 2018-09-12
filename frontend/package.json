@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "jwt-decode": "^2.2.0",
     "spectre.css": "^0.5.3",
     "vue": "^2.5.17",
     "vue-axios": "^2.1.3",

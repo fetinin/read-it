@@ -6,14 +6,13 @@ export interface Book {
   coverURL: string;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  token: string;
-  profilePic: string;
-}
-
 export interface File {
   name: string;
   reader: FileReader;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  surname: string;
 }
