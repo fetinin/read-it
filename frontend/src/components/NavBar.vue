@@ -9,8 +9,8 @@
     <template v-if="user">
       <a @click.prevent="logout" href="#logout" class="btn btn-link">Logout</a>
       <div class="user">
-        <figure class="avatar avatar-lg" :data-initial="user.name[0].toUpperCase()" style="background-color: #5755d9;">
-          <img v-if="user.profilePic" :src="user.profilePic" alt="Avatar">
+        <figure :class="['avatar', 'avatar-lg', {'no-bg': user.avatar}]" :data-initial="user.name[0].toUpperCase()" :style="{background}">
+          <img v-if="user.avatar" :src="'data:image/jpg;base64,' + user.avatar" alt="Avatar">
         </figure>
       </div>
     </template>
@@ -38,6 +38,9 @@ export default class NavBar extends Vue {
 </script>
 
 <style scoped>
+.no-bg {
+  background: transparent;
+}
 .navbar {
   min-height: 48px;
 }
