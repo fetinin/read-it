@@ -38,6 +38,9 @@ export default class NavBar extends Vue {
 </script>
 
 <style scoped>
+.navbar {
+  min-height: 48px;
+}
 div.user > * {
   margin-right: 10px;
 }
