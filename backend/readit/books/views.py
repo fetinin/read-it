@@ -8,6 +8,7 @@ from apistar.exceptions import NotFound
 from .convertor import Converter
 from . import schema
 from .models import Book
+from readit.components import User
 
 
 def list_books(
@@ -23,7 +24,7 @@ def list_books(
     ]
 
 
-def get_book(book_id: str) -> schema.Book:
+def get_book(book_id: str, user: User) -> schema.Book:
     book = Book.get_by_id(book_id)
     if not book:
         raise NotFound()

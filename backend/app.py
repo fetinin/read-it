@@ -9,13 +9,17 @@ from readit.db import db_init
 from readit.event_hooks import hooks
 from readit.books.routes import routes as book_routes
 from readit.users.routes import routes as user_routes
+from readit.components import UserComponent
 
 
 class AppCORS(CORSMixin, App):
     pass
 
 
-app = AppCORS(routes=book_routes + user_routes, event_hooks=hooks)
+routes = book_routes + user_routes
+components = [UserComponent()]
+
+app = AppCORS(routes=routes, event_hooks=hooks, components=components)
 
 
 if __name__ == "__main__":
