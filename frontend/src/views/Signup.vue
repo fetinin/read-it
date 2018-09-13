@@ -1,6 +1,8 @@
 <template>
 <div class="login-form">
-    <form class="form-group" @submit.prevent="onLogin">
+    <!-- TODO -->
+    <!-- PLACE LOGO HERE -->
+    <div class="form-group">
         <h2 class="header">Регистрация</h2>
         <p class="note">Войдите с помощью учетной записи в других сервисах</p>
         <div class="auth-services">
@@ -20,14 +22,7 @@
             </a>
           </span>
         </div>
-        
-        <!-- <hr>
-        <label class="form-label" for="login">Логин</label>
-        <input v-model="login" class="form-input" type="text" id="login" placeholder="AlanParrish26">
-        <label class="form-label" for="password">Пароль</label>
-        <input v-model='password' class="form-input" type="password" id="password" placeholder="jYOUmanji">
-        <button class="btn btn-primary">Зарегистрироваться</button> -->
-    </form>
+    </div>
 </div>
 </template>
 
@@ -37,10 +32,7 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({
   components: {},
 })
-export default class Signup extends Vue {
-  private login = '';
-  private password = '';
-}
+export default class Signup extends Vue {}
 </script>
 
 <style scoped>
@@ -53,16 +45,11 @@ export default class Signup extends Vue {
   justify-content: space-evenly;
 }
 .login-form {
-  margin: 25px auto 0 auto;
+  margin: 0 auto 0 auto;
+  align-self: center;
 }
 .note {
   color: #acb3c2;
-}
-button {
-  margin-top: 20px;
-  position: relative;
-  left: 50%;
-  transform: translate(-50%);
 }
 .auth-service img {
   border-radius: 35px;

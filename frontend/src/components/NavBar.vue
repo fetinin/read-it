@@ -2,22 +2,16 @@
 <header class="navbar">
   <section class="navbar-section">
     <router-link class="btn btn-link" to='/books'>Книги</router-link>
-    <router-link class="btn btn-link" to='/upload-book'>Upload</router-link>
+    <router-link class="btn btn-link" to='/upload-book'>Добавить книгу</router-link>
   </section>
   <section class="navbar-center">ReadIT</section>
   <section class="navbar-section">
-    <template v-if="user">
-      <a @click.prevent="logout" href="#logout" class="btn btn-link">Logout</a>
+      <a @click.prevent="logout" href="#logout" class="btn btn-link">Выйти</a>
       <div class="user">
-        <figure :class="['avatar', 'avatar-lg', {'no-bg': user.avatar}]" :data-initial="user.name[0].toUpperCase()" :style="{background}">
+        <figure :class="['avatar', 'avatar-lg', {'no-bg': user.avatar}]" :data-initial="user.name[0].toUpperCase()">
           <img v-if="user.avatar" :src="'data:image/jpg;base64,' + user.avatar" alt="Avatar">
         </figure>
       </div>
-    </template>
-    <template v-else>
-      <router-link class="btn btn-link" to='/login'>Login</router-link>
-    <router-link class="btn btn-link" to='/signup'>Sign Up</router-link>
-    </template>
   </section>
 </header>
 </template>
@@ -25,6 +19,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { User } from '@/types';
+import { logout as logoutUser } from '@/authorization';
 
 @Component
 export default class NavBar extends Vue {
@@ -32,7 +27,8 @@ export default class NavBar extends Vue {
     return this.$store.state.user;
   }
   private logout() {
-    this.$store.dispatch('deleteUser');
+    logoutUser();
+    this.$router.push({ name: 'signup' });
   }
 }
 </script>

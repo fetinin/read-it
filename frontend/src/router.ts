@@ -1,11 +1,12 @@
+import store from '@/store';
 import Vue from 'vue';
 import Router from 'vue-router';
 
 import { authorize } from './authorization';
+import router from './router';
 import Book from './views/Book.vue';
 import Books from './views/Books.vue';
 import Home from './views/Home.vue';
-import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
 import UploadBook from './views/UploadBook.vue';
 
@@ -24,11 +25,6 @@ export default new Router({
       path: '/books',
       name: 'books',
       component: Books,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login,
     },
     {
       path: '/signup',
@@ -50,11 +46,27 @@ export default new Router({
       path: '/authenticated/',
       name: 'auth',
       beforeEnter: (to, from, next) => {
-        if (to.query.access_token) {
-          authorize(to.query.access_token);
+        if (!store.state.user) {
+          return authorize(to.query.access_token)
+            .then(() => next({ name: 'books' }))
+            .catch((err) => {
+              console.error('Failed to authorize');
+              console.error(err);
+              next({ name: 'signup' });
+            });
         }
-        return next({ name: 'books' });
+        next({ name: 'books' });
       },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name === 'signup' || to.name === 'auth') {
+    return next();
+  }
+  if (!store.state.user) {
+    return next({ name: 'auth' });
+  }
+  return next();
 });

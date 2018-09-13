@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div v-if="user" id="nav">
       <NavBar></NavBar>
     </div>
     <div id="page-content">
@@ -18,7 +18,11 @@ import NavBar from './components/NavBar.vue';
 @Component({
   components: { NavBar },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  get user() {
+    return this.$store.state.user;
+  }
+}
 </script>
 
 

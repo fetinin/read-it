@@ -8,13 +8,28 @@ interface TokenData {
   userID: string;
 }
 
-export const authorize = (token: string) => {
+export const authorize = (token = '') => {
+  token = token ? token : String(localStorage.getItem('jwt'));
+  if (token === 'null') {
+    throw Error('No jwt provided.');
+  }
+  axios.defaults.headers = { Authentication: token };
+
   const data: TokenData = jwt_decode(token);
-  axios
+  return axios
     .get(`/users/${data.userID}`)
     .then((resp) => {
       const user: User = resp.data;
       store.dispatch('saveUser', user);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('jwt', token);
     })
     .catch((err) => console.error(err));
+};
+
+export const logout = () => {
+  store.dispatch('deleteUser');
+  localStorage.removeItem('user');
+  localStorage.removeItem('jwt');
+  axios.defaults.headers.Authentication = null;
 };
