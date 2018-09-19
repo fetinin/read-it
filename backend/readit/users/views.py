@@ -35,6 +35,7 @@ OAUTH_URLS = {
 
 def auth_user(auth_service_name: str, code: http.QueryParam):
     if not code:
+        # redirect to oauth service
         try:
             auth_path = OAUTH_URLS[auth_service_name]
         except KeyError:
@@ -64,7 +65,10 @@ def auth_user(auth_service_name: str, code: http.QueryParam):
 
 
 def get_user(user: components.User) -> schema.User:
-    user = User.objects.with_id(user.id)
+    user_db = User.objects.with_id(user.id)
     return schema.User(
-        id=str(user.id), name=user.name, surname=user.surname, avatar=user.avatar
+        id=str(user_db.id),
+        name=user_db.name,
+        surname=user_db.surname,
+        avatar=user_db.avatar,
     )
