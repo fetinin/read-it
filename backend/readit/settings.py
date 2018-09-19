@@ -9,3 +9,4 @@ class DB:
 class Secrets:
     jwt_sign = os.environ.get("JWT_SECRET", "test")
     vk_app = os.environ.get("VK_SECRET", "test")
+    google_app = os.environ.get("GOOGLE_SECRET", "test")

@@ -92,3 +92,49 @@ class VKClient(AuthClientBase):
                 user["first_name"], user["last_name"], str(user["id"]), photo
             )
         return self._user
+
+
+class GoogleClient(AuthClientBase):
+    service_type = AuthTypes.google
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.token = self._init_token(code)
+        self._user: Optional[User] = None
+        self.user_id = self.user.id
+
+    @staticmethod
+    def _init_token(code: str) -> Tuple[str, str]:
+        resp = requests.post(
+            "https://www.googleapis.com/oauth2/v4/token",
+            data={
+                "code": code,
+                "client_id": "114302730103-6mjed5701n57tajalsqk280eg2u11m33.apps.googleusercontent.com",
+                "client_secret": settings.Secrets.google_app,
+                "redirect_uri": "http://localhost:5000/auth/google",  # todo: получать из вне?
+                "grant_type": "authorization_code",
+            },
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        return data["access_token"]
+
+    @property
+    def user(self):
+        if self._user is None:
+            user = requests.get(
+                "https://people.googleapis.com/v1/people/me",
+                params={"resourceName": "people/me", "personFields": "names,photos"},
+                headers={"Authorization": f"Bearer {self.token}"},
+            ).json()
+            if user["photos"] and not user["photos"][0].get("default"):
+                photo = base64.b64encode(requests.get(user["photos"][0]["url"]).content)
+            else:
+                photo = ""
+            self._user = User(
+                name=user["names"][0]["givenName"],
+                surname=user["names"][0]["familyName"],
+                id=str(user["names"][0]["metadata"]["source"]["id"]),
+                avatar=photo,
+            )
+        return self._user
