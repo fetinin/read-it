@@ -1,18 +1,47 @@
-from http import HTTPStatus
 from urllib.parse import urlencode
 
 import jwt
 from apistar import http
-from apistar.exceptions import BadRequest
-from apistar.http import Response
+from apistar.exceptions import BadRequest, NotFound
 
-from readit import settings
+from readit import components, settings
+from readit.helpers import redirect
 from readit.users.auth import AuthClient, AuthTypes
 from . import schema
 from .models import User
 
+OAUTH_URLS = {
+    "vk": {
+        "url": "https://oauth.vk.com/authorize",
+        "query": {
+            "client_id": "6684417",
+            "display": "page",
+            "redirect_uri": "http://localhost:5000/auth/vk",
+            "response_type": "code",
+            "v": "5.84",
+        },
+    },
+    "google": {
+        "url": "https://accounts.google.com/o/oauth2/v2/auth",
+        "query": {
+            "client_id": "114302730103-6mjed5701n57tajalsqk280eg2u11m33.apps.googleusercontent.com",
+            "scope": "https://www.googleapis.com/auth/userinfo.profile",
+            "redirect_uri": "http://localhost:5000/auth/google",
+            "response_type": "code",
+        },
+    },
+}
 
-def auth_user(auth_service_name: str, code: http.QueryParam, path: http.Path):
+
+def auth_user(auth_service_name: str, code: http.QueryParam):
+    if not code:
+        try:
+            auth_path = OAUTH_URLS[auth_service_name]
+        except KeyError:
+            raise NotFound()
+        query = urlencode(auth_path["query"])
+        return redirect(f"{auth_path['url']}?{query}")
+
     try:
         auth_type = AuthTypes[auth_service_name]
     except KeyError:
@@ -31,15 +60,11 @@ def auth_user(auth_service_name: str, code: http.QueryParam, path: http.Path):
         user.save()
     token = jwt.encode({"userID": str(user.id)}, key=settings.Secrets.jwt_sign)
     query = urlencode({"access_token": token.decode("utf-8")})
-    return Response(
-        b"",
-        status_code=HTTPStatus.SEE_OTHER,
-        headers={"Location": f"http://localhost:8080/authenticated?{query}"},
-    )
+    return redirect(f"http://localhost:8080/authenticated?{query}")
 
 
-def get_user(user_id: str) -> schema.User:
-    user = User.objects.with_id(user_id)
+def get_user(user: components.User) -> schema.User:
+    user = User.objects.with_id(user.id)
     return schema.User(
         id=str(user.id), name=user.name, surname=user.surname, avatar=user.avatar
     )

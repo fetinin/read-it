@@ -1,4 +1,7 @@
+from http import HTTPStatus
 from itertools import takewhile, count
+
+from apistar.http import Response
 
 
 def sliced(seq, n):
@@ -20,3 +23,7 @@ def sliced(seq, n):
 
     """
     return takewhile(bool, (seq[i : i + n] for i in count(0, n)))
+
+
+def redirect(to):
+    return Response(b"", status_code=HTTPStatus.SEE_OTHER, headers={"Location": to})

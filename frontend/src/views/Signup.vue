@@ -7,17 +7,17 @@
         <p class="note">Войдите с помощью учетной записи в других сервисах</p>
         <div class="auth-services">
             <span class='auth-service'>
-            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+            <a href="http://localhost:5000/auth/vk">
               <img src="../assets/vk-logo.png" alt="">
             </a>
           </span>
           <span class='auth-service'>
-            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+            <a href="http://localhost:5000/auth/google">
               <img src="../assets/google-logo.png" alt="">
             </a>
           </span>
           <span class='auth-service'>
-            <a href="https://oauth.vk.com/authorize?client_id=6684417&display=page&redirect_uri=http://localhost:5000/auth/vk&response_type=code&v=5.84">
+            <a href="http://localhost:5000/auth/github">
               <img src="../assets/ghub-icon-w-64.png" alt="">
             </a>
           </span>

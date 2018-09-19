@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
   if (!store.state.user) {
-    return next({ name: 'auth' });
+    return next({ name: 'signup' });
   }
   return next();
 });
