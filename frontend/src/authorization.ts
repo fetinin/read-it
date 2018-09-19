@@ -16,15 +16,12 @@ export const authorize = (token = '') => {
   axios.defaults.headers = { Authentication: token };
 
   const data: TokenData = jwt_decode(token);
-  return axios
-    .get(`/users/${data.userID}`)
-    .then((resp) => {
-      const user: User = resp.data;
-      store.dispatch('saveUser', user);
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('jwt', token);
-    })
-    .catch((err) => console.error(err));
+  return axios.get(`/users/${data.userID}`).then((resp) => {
+    const user: User = resp.data;
+    store.dispatch('saveUser', user);
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('jwt', token);
+  });
 };
 
 export const logout = () => {

@@ -1,9 +1,9 @@
-import store from '@/store';
 import Vue from 'vue';
 import Router from 'vue-router';
 
 import { authorize } from './authorization';
 import router from './router';
+import store from './store';
 import Book from './views/Book.vue';
 import Books from './views/Books.vue';
 import Home from './views/Home.vue';
