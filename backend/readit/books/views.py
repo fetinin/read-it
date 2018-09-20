@@ -34,6 +34,7 @@ def get_book(book_id: str, user: User) -> schema.Book:
         author=book.author,
         pages=book.pages,
         cover=book.cover,
+        page_active=book.page_active,
     )
 
 

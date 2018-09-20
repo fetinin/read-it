@@ -13,6 +13,9 @@ class BookFields(types.Type):
     cover = validators.String(
         description="Book cover image as base64.", allow_null=True
     )
+    page_active = validators.Integer(
+        description="Current active page number.", allow_null=True, default=1
+    )
 
 
 class BookContent(types.Type):

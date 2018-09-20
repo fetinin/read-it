@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime
 from typing import Union
 
-from mongoengine import StringField, DateTimeField, ListField, Document
+from mongoengine import StringField, DateTimeField, ListField, Document, IntField
 from mongoengine import errors as mongoerrors
 
 
@@ -14,6 +14,7 @@ class Book(Document):
     pages = ListField(StringField())
     author = StringField(max_length=50)
     cover = StringField()
+    page_active = IntField(default=1)
 
     meta = {"db_alias": "core", "collection": "books"}
 
