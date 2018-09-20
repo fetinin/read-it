@@ -23,7 +23,7 @@ class AuthTypes(IntEnum):
 class AuthClient:
     _clients: Dict[AuthTypes, Type[AuthClientBase]] = {}
 
-    def __init__(self, service: AuthTypes, code: str):
+    def __init__(self, service: AuthTypes, code: str) -> None:
         self._client = self._clients[service](code)
 
     def __getattr__(self, item):
@@ -54,18 +54,17 @@ class VKClient(AuthClientBase):
 
     def __init__(self, code: str) -> None:
         super().__init__(code)
-        self.user_id, self.token = self._init_token(code)
+        self.user_id, self.token = self._init_token()
         self._user: Optional[User] = None
 
-    @staticmethod
-    def _init_token(code: str) -> Tuple[str, str]:
+    def _init_token(self) -> Tuple[str, str]:
         resp = requests.get(
             "https://oauth.vk.com/access_token",
             params={
-                "client_id": 6684417,
+                "client_id": "6684417",
                 "client_secret": settings.Secrets.vk_app,
                 "redirect_uri": "http://localhost:5000/auth/vk",  # todo: получать из вне?
-                "code": code,
+                "code": self.code,
             },
         )
         resp.raise_for_status()
@@ -99,16 +98,15 @@ class GoogleClient(AuthClientBase):
 
     def __init__(self, code: str) -> None:
         super().__init__(code)
-        self.token = self._init_token(code)
-        self._user: Optional[User] = None
+        self.token = self._init_token()
+        self.user: User = self._get_user()
         self.user_id = self.user.id
 
-    @staticmethod
-    def _init_token(code: str) -> Tuple[str, str]:
+    def _init_token(self) -> str:
         resp = requests.post(
             "https://www.googleapis.com/oauth2/v4/token",
             data={
-                "code": code,
+                "code": self.code,
                 "client_id": "114302730103-6mjed5701n57tajalsqk280eg2u11m33.apps.googleusercontent.com",
                 "client_secret": settings.Secrets.google_app,
                 "redirect_uri": "http://localhost:5000/auth/google",  # todo: получать из вне?
@@ -119,22 +117,54 @@ class GoogleClient(AuthClientBase):
         data = resp.json()
         return data["access_token"]
 
-    @property
-    def user(self):
-        if self._user is None:
-            user = requests.get(
-                "https://people.googleapis.com/v1/people/me",
-                params={"resourceName": "people/me", "personFields": "names,photos"},
-                headers={"Authorization": f"Bearer {self.token}"},
-            ).json()
-            if user["photos"] and not user["photos"][0].get("default"):
-                photo = base64.b64encode(requests.get(user["photos"][0]["url"]).content)
-            else:
-                photo = ""
-            self._user = User(
-                name=user["names"][0]["givenName"],
-                surname=user["names"][0]["familyName"],
-                id=str(user["names"][0]["metadata"]["source"]["id"]),
-                avatar=photo,
-            )
-        return self._user
+    def _get_user(self):
+        user = requests.get(
+            "https://people.googleapis.com/v1/people/me",
+            params={"resourceName": "people/me", "personFields": "names,photos"},
+            headers={"Authorization": f"Bearer {self.token}"},
+        ).json()
+        if user["photos"] and not user["photos"][0].get("default"):
+            photo = base64.b64encode(requests.get(user["photos"][0]["url"]).content)
+        else:
+            photo = ""
+        return User(
+            name=user["names"][0]["givenName"],
+            surname=user["names"][0]["familyName"],
+            id=str(user["names"][0]["metadata"]["source"]["id"]),
+            avatar=photo,
+        )
+
+
+class GithubClient(AuthClientBase):
+    service_type = AuthTypes.github
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.token = self._init_token()
+        self.user: User = self._get_user()
+        self.user_id = self.user.id
+
+    def _init_token(self) -> str:
+        response = requests.post(
+            "https://github.com/login/oauth/access_token",
+            params={
+                "client_id": "ac99328569221f9822bc",
+                "client_secret": settings.Secrets.github_app,
+                "code": self.code,
+                "redirect_url": "http://localhost:5000/auth/github",
+            },
+            headers={"Accept": "application/json"},
+        )
+        response.raise_for_status()
+        token = response.json()["access_token"]
+        return token
+
+    def _get_user(self):
+        response = requests.get(
+            "https://api.github.com/user",
+            headers={"Authorization": f"token {self.token}"},
+        )
+        response.raise_for_status()
+        user = response.json()
+        photo = base64.b64encode(requests.get(user["avatar_url"]).content)
+        return User(id=str(user["id"]), name=user["name"], surname="", avatar=photo)

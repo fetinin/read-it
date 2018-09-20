@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class User(object):
-    def __init__(self, id_: str):
+    def __init__(self, id_: str) -> None:
         self.id = id_
 
 

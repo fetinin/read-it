@@ -24,7 +24,7 @@ class ConverterPluginType:
 
 
 class Converter:
-    _converters: ClassVar[Dict[str, ConverterPluginType]] = {}
+    _converters: ClassVar[Dict[str, Type[ConverterPluginType]]] = {}
 
     def __init__(self, converter_type):
         try:

@@ -32,6 +32,14 @@ OAUTH_URLS = {
             "access_type": "online",
         },
     },
+    "github": {
+        "url": "https://github.com/login/oauth/authorize",
+        "query": {
+            "client_id": "ac99328569221f9822bc",
+            "redirect_url": "http://localhost:5000/auth/github",
+            "scope": "read:user",
+        },
+    },
 }
 
 
@@ -39,7 +47,7 @@ def auth_user(auth_service_name: str, code: http.QueryParam):
     if not code:
         # redirect to oauth service
         try:
-            auth_path = OAUTH_URLS[auth_service_name]
+            auth_path: dict = OAUTH_URLS[auth_service_name]
         except KeyError:
             raise NotFound()
         query = urlencode(auth_path["query"])
