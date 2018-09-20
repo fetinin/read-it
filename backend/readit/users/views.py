@@ -28,6 +28,8 @@ OAUTH_URLS = {
             "scope": "https://www.googleapis.com/auth/userinfo.profile",
             "redirect_uri": "http://localhost:5000/auth/google",
             "response_type": "code",
+            "include_granted_scopes": "true",
+            "access_type": "online",
         },
     },
 }
