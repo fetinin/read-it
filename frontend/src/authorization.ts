@@ -14,14 +14,12 @@ export const authorize = (token: string) => {
   return axios.get(`/users/${data.userID}`).then((resp) => {
     const user: User = resp.data;
     store.dispatch('saveUser', user);
-    localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('jwt', token);
   });
 };
 
 export const logout = () => {
   store.dispatch('deleteUser');
-  localStorage.removeItem('user');
   localStorage.removeItem('jwt');
   axios.defaults.headers.Authentication = null;
 };
