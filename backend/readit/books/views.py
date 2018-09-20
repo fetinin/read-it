@@ -20,7 +20,7 @@ def list_books(
         schema.BookNoContent(
             id=str(book.id), title=book.title, author=book.author, cover=book.cover
         )
-        for book in Book.objects.exclude("pages")[offset:limit]
+        for book in Book.objects.exclude("pages").order_by("created_date")[offset:limit]
     ]
 
 
