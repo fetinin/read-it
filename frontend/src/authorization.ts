@@ -7,11 +7,7 @@ interface TokenData {
   userID: string;
 }
 
-export const authorize = (token = '') => {
-  token = token ? token : String(localStorage.getItem('jwt'));
-  if (token === 'null') {
-    throw Error('No jwt provided.');
-  }
+export const authorize = (token: string) => {
   axios.defaults.headers = { Authentication: token };
 
   const data: TokenData = jwt_decode(token);

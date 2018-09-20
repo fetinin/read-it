@@ -47,7 +47,13 @@ export default new Router({
       name: 'auth',
       beforeEnter: (to, from, next) => {
         if (!store.state.user) {
-          return authorize(to.query.access_token)
+          const token: string = to.query.access_token
+            ? to.query.access_token
+            : String(localStorage.getItem('jwt'));
+          if (token === 'null') {
+            return next({ name: 'signup' });
+          }
+          return authorize(token)
             .then(() => next({ name: 'books' }))
             .catch((err) => {
               console.error('Failed to authorize');
@@ -66,7 +72,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
   if (!store.state.user) {
-    return next({ name: 'signup' });
+    return next({ name: 'auth' });
   }
   return next();
 });
