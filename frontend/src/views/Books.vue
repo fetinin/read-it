@@ -1,6 +1,9 @@
 <template>
   <div class="books container grid-xl">
-    <div v-if="books.length" class="columns">
+
+    <div v-if="!isLoaded" class="loading loading-lg"></div>
+
+    <div v-else-if="books.length" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
       @deleted="onBookDelete(id)"
       v-for="(book, id) in books"
@@ -8,7 +11,7 @@
       :book="book">
       </BookCover>
     </div>
-    
+
     <div v-else class="empty">
       <div class="empty-icon">
         <i class="icon icon-search"></i>
@@ -36,6 +39,7 @@ import { Book as BookType } from '@/types';
 })
 export default class BooksVue extends Vue {
   public books: BookType[] = [];
+  private isLoaded = false;
 
   private onBookDelete(bookID: number) {
     this.books.splice(bookID, 1);
@@ -55,6 +59,7 @@ export default class BooksVue extends Vue {
             coverURL: el.cover,
           };
         });
+        this.isLoaded = true;
       })
       .catch((err) => console.log(err.response ? err.response : err));
   }
