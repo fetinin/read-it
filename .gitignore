@@ -1,5 +1,6 @@
 #### Backend ignore ####
 .venv
+.env
 __pycache__
 .dmypy.json
 .mypy_cache/

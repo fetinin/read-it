@@ -9,6 +9,7 @@ mongoengine = "*"
 apistar-cors = "*"
 chardet = "*"
 bleach = "*"
+dnspython = "*"
 
 [dev-packages]
 cookiecutter = "*"

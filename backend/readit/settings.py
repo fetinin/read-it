@@ -4,6 +4,8 @@ import os
 class DB:
     hostname: str = os.environ["DB_HOSTNAME"]
     port: int = int(os.environ["DB_PORT"])
+    username = os.environ["DB_USERNAME"]
+    password = os.environ["DB_PASSWORD"]
 
 
 class Secrets:
