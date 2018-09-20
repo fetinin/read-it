@@ -1,12 +1,23 @@
 <template>
   <div class="books container grid-xl">
-    <div class="columns">
+    <div v-if="books.length" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
       @deleted="onBookDelete(id)"
       v-for="(book, id) in books"
       :key="book.id"
       :book="book">
       </BookCover>
+    </div>
+    
+    <div v-else class="empty">
+      <div class="empty-icon">
+        <i class="icon icon-search"></i>
+      </div>
+      <p class="empty-title h5">Список книг пуст</p>
+      <p class="empty-subtitle">Загрузи свою первую книгу!</p>
+      <div class="empty-action">
+        <router-link class="btn btn-primary" to='/upload-book' tag="button">Добавить книгу</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -31,7 +42,7 @@ export default class BooksVue extends Vue {
   }
 
   private created() {
-    // this.books = bookData;
+    // this.books = []; // Load offline
     this.$http
       .get('/books')
       .then((resp) => {
