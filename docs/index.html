@@ -37,7 +37,13 @@
                 
                     <option value="#get_book">get_book</option>
                 
+                    <option value="#delete_book">delete_book</option>
+                
                     <option value="#update_book">update_book</option>
+                
+                    <option value="#auth_user">auth_user</option>
+                
+                    <option value="#get_user">get_user</option>
                 
             </optgroup>
         
@@ -60,7 +66,19 @@
                 </li>
                 
                 <li>
+                    <a href="#delete_book">delete_book</a>
+                </li>
+                
+                <li>
                     <a href="#update_book">update_book</a>
+                </li>
+                
+                <li>
+                    <a href="#auth_user">auth_user</a>
+                </li>
+                
+                <li>
+                    <a href="#get_user">get_user</a>
                 </li>
                 
             </ul>
@@ -230,6 +248,10 @@ print(response.json())
                 
                     <tr><td class="parameter-name"><code>author</code></td><td></td></tr>
                 
+                    <tr><td class="parameter-name"><code>cover</code></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>page_active</code></td><td></td></tr>
+                
                     <tr><td class="parameter-name"><code>file</code> <span class="label label-warning">required</span></td><td></td></tr>
                 
                     <tr><td class="parameter-name"><code>format</code> <span class="label label-warning">required</span></td><td></td></tr>
@@ -249,6 +271,8 @@ print(response.json())
 var data = {
     title: ...,
     author: ...,
+    cover: ...,
+    page_active: ...,
     file: ...,
     format: ...
 };
@@ -276,6 +300,8 @@ url = "/books"
 data = {
     "title": ...,
     "author": ...,
+    "cover": ...,
+    "page_active": ...,
     "file": ...,
     "format": ...
 }
@@ -372,6 +398,78 @@ print(response.json())
             <i class="fa fa-exchange"></i> Interact
         </button>-->
 
+        <h3 id="delete_book" class="coredocs-link-title">delete_book <a href="#delete_book"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">DELETE</span>
+            <code>/books/{book_id}</code>
+        </div>
+
+        
+
+
+    <h4>Path Parameters</h4>
+    <p>The following parameters should be included in the URL path.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>book_id</code> <span class="label label-warning">required</span></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books/{book_id}");
+var options = {
+    method: "DELETE"
+};
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/books/{book_id}"
+
+response = requests.delete(url)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
         <h3 id="update_book" class="coredocs-link-title">update_book <a href="#update_book"><i class="fa fa-link" aria-hidden="true"></i>
     </a></h3>
 
@@ -413,6 +511,10 @@ print(response.json())
                 
                     <tr><td class="parameter-name"><code>author</code></td><td></td></tr>
                 
+                    <tr><td class="parameter-name"><code>cover</code></td><td></td></tr>
+                
+                    <tr><td class="parameter-name"><code>page_active</code></td><td></td></tr>
+                
             
         </tbody>
     </table>
@@ -427,7 +529,9 @@ print(response.json())
             <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/books/{book_id}");
 var data = {
     title: ...,
-    author: ...
+    author: ...,
+    cover: ...,
+    page_active: ...
 };
 var options = {
     method: "PATCH",
@@ -452,10 +556,175 @@ fetch(url, options).then(function(response) {
 url = "/books/{book_id}"
 data = {
     "title": ...,
-    "author": ...
+    "author": ...,
+    "cover": ...,
+    "page_active": ...
 }
 
 response = requests.patch(url, json=data)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="auth_user" class="coredocs-link-title">auth_user <a href="#auth_user"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">GET</span>
+            <code>/auth/{auth_service_name}</code>
+        </div>
+
+        
+
+
+    <h4>Path Parameters</h4>
+    <p>The following parameters should be included in the URL path.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>auth_service_name</code> <span class="label label-warning">required</span></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+    <h4>Query Parameters</h4>
+    <p>The following parameters should be included as part of a URL query string.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>code</code></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/auth/{auth_service_name}");
+var options = {
+    method: "GET"
+};
+url.search = new URLSearchParams({
+    code: ...
+});
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/auth/{auth_service_name}"
+params = {
+    "code": ...
+}
+
+response = requests.get(url, params=params)
+response.raise_for_status()
+print(response.json())
+</code></pre>
+        
+    </div>
+</div>
+
+
+
+    <div class="row coredocs-link">
+    <div class="col-md-6 docs-content">
+        <!--<button
+            class="btn btn-sm btn-success"
+            style="float: right; margin-top: 20px"
+            data-toggle="modal"
+            data-target="#__modal">
+            <i class="fa fa-exchange"></i> Interact
+        </button>-->
+
+        <h3 id="get_user" class="coredocs-link-title">get_user <a href="#get_user"><i class="fa fa-link" aria-hidden="true"></i>
+    </a></h3>
+
+        <div class="meta">
+            <span class="label label-primary">GET</span>
+            <code>/users/{user_id}</code>
+        </div>
+
+        
+
+
+    <h4>Path Parameters</h4>
+    <p>The following parameters should be included in the URL path.</p>
+    <table class="parameters table table-bordered table-striped">
+        <thead>
+            <tr><th>Parameter</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            
+            <tr><td class="parameter-name"><code>user_id</code> <span class="label label-warning">required</span></td><td></td></tr>
+            
+        </tbody>
+    </table>
+
+
+
+
+    </div>
+
+    <div class="col-md-6 section-secondary">
+        
+            
+            
+            <pre class="highlight javascript " data-language="javascript"><code>var url = new URL("/users/{user_id}");
+var options = {
+    method: "GET"
+};
+
+fetch(url, options).then(function(response) {
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    console.log(response.json());
+})
+</code></pre>
+        
+            
+            
+            <pre class="highlight python d-none" data-language="python"><code>import requests
+
+url = "/users/{user_id}"
+
+response = requests.get(url)
 response.raise_for_status()
 print(response.json())
 </code></pre>

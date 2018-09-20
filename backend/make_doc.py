@@ -5,7 +5,7 @@ import apistar
 import jinja2
 from apistar import App, codecs
 
-from readit.routes import routes
+from app import routes
 
 
 def make_doc(directory):
@@ -36,7 +36,10 @@ def make_doc(directory):
     output_file.close()
 
     static_dir = os.path.join(os.path.dirname(apistar.__file__), "static")
-    shutil.copytree(static_dir, os.path.join(directory, "apistar"))
+    apistar_static_dir = os.path.join(directory, "apistar")
+    if os.path.exists(apistar_static_dir):
+        shutil.rmtree(apistar_static_dir)
+    shutil.copytree(static_dir, apistar_static_dir)
 
     print(f"Documentation built at {output_path}")
 
