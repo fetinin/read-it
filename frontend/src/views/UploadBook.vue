@@ -9,7 +9,7 @@
 
         <div class="dropbox">
           <input type="file" :disabled="isSaving" @change="onBookUpload($event.target.files)"
-            accept="application/pdf,text/*" class="input-file" id="book" rяequired>
+            accept="application/pdf,text/*,.epub" class="input-file" id="book" rяequired>
             <p v-if="isInitial">
               Перетащите вашу книгу сюда<br> или кликните чтобы открыть обозреватель
             </p>
