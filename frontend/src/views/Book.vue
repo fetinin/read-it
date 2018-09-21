@@ -3,7 +3,7 @@
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title">{{book.title}} - {{book.author}}</p>
           <transition name="fade" mode="out-in">
-            <p class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></p>
+            <p class="page" v-html="formatPage(book.pages[currentPage - 1])" :key="currentPage"></p>
           </transition>
           <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
       </div>
@@ -60,6 +60,11 @@ export default class BookView extends Vue {
     }
   }
 
+  private formatPage(page: string) {
+    // todo: should this be done on the backend beforehand?
+    return page.replace(/\n/g, '<br>').replace(/ /g, '&nbsp');
+  }
+
   private created() {
     document.addEventListener('keydown', this.handleKeyPress);
   }
@@ -70,9 +75,7 @@ export default class BookView extends Vue {
         id: resp.data.book,
         author: resp.data.author,
         title: resp.data.title,
-        pages: resp.data.pages.map((el: any): string => {
-          return el.replace(/\n/g, '<br>');
-        }),
+        pages: resp.data.pages,
         coverURL: resp.data.cover,
       };
     });
@@ -109,4 +112,3 @@ export default class BookView extends Vue {
   opacity: 0;
 }
 </style>
-search

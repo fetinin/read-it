@@ -6,11 +6,17 @@
   </section>
   <section class="navbar-center">ReadIT</section>
   <section class="navbar-section">
-      <a @click.prevent="logout" href="#logout" class="btn btn-link">Выйти</a>
-      <div class="user">
-        <figure :class="['avatar', 'avatar-lg', {'no-bg': user.avatar}]" :data-initial="user.name[0].toUpperCase()">
-          <img v-if="user.avatar" :src="'data:image/jpg;base64,' + user.avatar" alt="Avatar">
-        </figure>
+      <div class="dropdown">
+        <a href="#" class="btn-link dropdown-toggle" tabindex="0">
+          <div class="user">
+            <figure :class="['avatar', 'avatar-lg', {'no-bg': user.avatar}]" :data-initial="user.name[0].toUpperCase()">
+              <img v-if="user.avatar" :src="'data:image/jpg;base64,' + user.avatar" alt="Avatar">
+            </figure>
+          </div>
+        </a>
+        <ul class="menu">
+          <a @click.prevent="logout" href="#logout" class="btn btn-link">Выйти</a>
+        </ul>
       </div>
   </section>
 </header>
