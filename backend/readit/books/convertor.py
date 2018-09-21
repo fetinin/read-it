@@ -1,8 +1,13 @@
+import base64
 import datetime
 import os
+import re
 import subprocess
 import tempfile
-from typing import ClassVar, Dict, List, Type
+from collections import namedtuple
+from io import BytesIO
+from typing import ClassVar, Dict, List, Tuple, Type
+from zipfile import ZipFile
 
 import bleach
 from chardet import UniversalDetector
@@ -23,8 +28,29 @@ class ConverterPluginType:
         ...
 
 
+class BleachSanitizer:
+    class BlackList(list):
+        forbidden_tags = {"script", "a", "style"}
+
+        def __contains__(self, item):
+            return item not in self.forbidden_tags
+
+    forbidden_html_tags = BlackList()
+    allowed_attrs = {"img": {"alt", "height", "width", "src"}}
+
+    def sanitize(self, text):
+        return bleach.clean(
+            text,
+            tags=self.forbidden_html_tags,
+            attributes=self.allowed_attrs,
+            protocols=["data"],
+            strip=True,
+        )
+
+
 class Converter:
     _converters: ClassVar[Dict[str, Type[ConverterPluginType]]] = {}
+    sanitizer = BleachSanitizer()
 
     def __init__(self, converter_type):
         try:
@@ -35,10 +61,10 @@ class Converter:
                 f"Choose one of: {self._converters.keys()}."
             )
 
-    @staticmethod
-    def _sanitize(text: str):
+    @classmethod
+    def _sanitize(cls, text: str):
         """Escape html tags"""
-        return bleach.clean(text)
+        return cls.sanitizer.sanitize(text)
 
     @classmethod
     def add_converter(cls, fmt: str):
