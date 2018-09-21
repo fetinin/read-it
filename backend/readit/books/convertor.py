@@ -99,3 +99,63 @@ class _PDFConverter:
     def convert(cls, data: bytes) -> List[str]:
         text = cls._extract_text(data)
         return text.strip().split("\f")
+
+
+@Converter.add_converter("epub")
+class _EpubConverter:
+    file_obj = namedtuple("FileObj", "name content")
+    body_regexp = re.compile(rb"<body>(.*)</body>", re.DOTALL | re.IGNORECASE)
+    anchor_regexp = re.compile(rb"<a.+>(.+)</a>", re.IGNORECASE)
+
+    @classmethod
+    def _extract_zip_content(cls, stream) -> Tuple[List[file_obj], List[file_obj]]:
+        with ZipFile(stream) as zip_file:
+            pages = []
+            images = []
+            for file in zip_file.filelist:
+                if file.filename.endswith(".html"):
+                    with zip_file.open(file) as fh:
+                        name = file.filename.split(os.sep)[-1]
+                        pages.append(cls.file_obj(name.encode("utf-8"), fh.read()))
+                if file.filename.endswith(".jpg"):
+                    with zip_file.open(file) as fh:
+                        name = file.filename.split(os.sep)[-1]
+                        images.append(cls.file_obj(name.encode("utf-8"), fh.read()))
+            return pages, images
+
+    @classmethod
+    def _extract_body(cls, text: bytes) -> bytes:
+        res = cls.body_regexp.search(text)
+        if res is not None:
+            return res.group(1)
+        return b""
+
+    @staticmethod
+    def _images_to_base64_url(images: List[file_obj]) -> List[Tuple[bytes, bytes]]:
+        return [
+            (image.name, b"data:image/jpeg;base64,%s" % base64.b64encode(image.content))
+            for image in images
+        ]
+
+    @staticmethod
+    def _replace_images(
+        content: bytes, images_urls: List[Tuple[bytes, bytes]]
+    ) -> bytes:
+        for name, img in images_urls:
+            content = content.replace(name, img)
+        return content
+
+    @classmethod
+    def _extract_pages(cls, data: bytes):
+        pages, images = cls._extract_zip_content(BytesIO(data))
+        images_urls = cls._images_to_base64_url(images)
+        pages_processed = []
+        for page in pages:
+            content = cls._extract_body(page.content)
+            content = cls._replace_images(content, images_urls)
+            pages_processed.append(content)
+        return pages_processed
+
+    @classmethod
+    def convert(cls, data: bytes) -> List[str]:
+        return [page.decode("utf-8") for page in cls._extract_pages(data)]
