@@ -95,11 +95,17 @@ class _TextConverter:
         detector.close()
         return detector.result["encoding"]
 
+    @staticmethod
+    def _add_html_tags(text: str) -> str:
+        return text.replace("  ", "&nbsp;&nbsp;").replace("\n", "<br>")
+
     @classmethod
     def convert(cls, content: bytes) -> List[str]:
         encoding = cls._get_encoding(content)
+        text = content.decode(encoding, errors="ignore")
         # todo: be smarter with page breaks, do not cut words
-        return list(sliced(str(content, encoding), cls.page_length))
+        sliced_text = sliced(text, cls.page_length)
+        return [cls._add_html_tags(page) for page in sliced_text]
 
 
 @Converter.add_converter("pdf")
