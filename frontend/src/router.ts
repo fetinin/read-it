@@ -46,6 +46,9 @@ export default new Router({
       path: '/authenticated/',
       name: 'auth',
       beforeEnter: (to, from, next) => {
+        const goToNextPage = to.params.nextPage
+          ? () => next({ path: to.params.nextPage })
+          : () => next({ name: 'books' });
         if (!store.state.user) {
           const token: string = to.query.access_token
             ? to.query.access_token
@@ -54,14 +57,14 @@ export default new Router({
             return next({ name: 'signup' });
           }
           return authorize(token)
-            .then(() => next({ name: 'books' }))
+            .then(() => goToNextPage())
             .catch((err) => {
               console.error('Failed to authorize');
               console.error(err);
               next({ name: 'signup' });
             });
         }
-        next({ name: 'books' });
+        goToNextPage();
       },
     },
   ],
@@ -72,7 +75,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
   if (!store.state.user) {
-    return next({ name: 'auth' });
+    return next({ name: 'auth', params: { nextPage: to.fullPath } });
   }
   return next();
 });
