@@ -110,27 +110,61 @@ class _TextConverter:
 
 @Converter.add_converter("pdf")
 class _PDFConverter:
+    body_regexp = re.compile(rb"<body[^>]*>(.*)</body>", re.DOTALL | re.IGNORECASE)
+
     @classmethod
-    def _extract_text(cls, text: bytes) -> str:
-        with tempfile.NamedTemporaryFile() as tmp:
-            tmp.write(text)
-            out_name = f"{tmp.name}.txt"
-            try:
-                res = subprocess.run(
-                    f"pdftotext -eol unix -layout {tmp.name} {out_name}".split(" ")
-                )
-            except subprocess.CalledProcessError as err:
-                raise ConvertError(f"Failed to convert file. {res.stdout}") from err
-            try:
-                with open(out_name) as out:
-                    return out.read()
-            finally:
-                os.remove(out_name)
+    def _extract_body(cls, text: bytes) -> bytes:
+        res = cls.body_regexp.search(text)
+        if res is not None:
+            return res.group(1)
+        return b""
+
+    @classmethod
+    def _extract_content(cls, text: bytes, to: str) -> bytes:
+        in_name = f"{to}/in_file"
+        with open(in_name, "wb") as fh:
+            fh.write(text)
+        try:
+            res = subprocess.run(
+                f"pdftohtml -p -noframes -nomerge -stdout {in_name}".split(" "),
+                capture_output=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as err:
+            raise ConvertError(f"Failed to convert file. {res.stdout}") from err
+        html_content = res.stdout
+        return cls._extract_body(html_content).strip()
+
+    @staticmethod
+    def _extract_images_content(path: str) -> Dict[bytes, bytes]:
+        images = [file for file in os.listdir(path) if file.endswith((".jpg", ".png"))]
+        images_data = {}
+        for image in images:
+            img_path = os.path.join(path, image)
+            with open(img_path, "rb") as fh:
+                images_data[img_path.encode("utf-8")] = base64.b64encode(fh.read())
+        return images_data
+
+    @staticmethod
+    def _insert_images(html: bytes, images: Dict[bytes, bytes]) -> bytes:
+        for img_name, img_content in images.items():
+            extension = img_name.split(b".")[-1].lower()
+            img_data = b"data:image/%s;base64,%s" % (extension, img_content)
+            html = html.replace(img_name, img_data)
+        return html
+
+    @staticmethod
+    def _split_html(html: str) -> List[str]:
+        return [page.strip() for page in html.split("<hr/>")]
 
     @classmethod
     def convert(cls, data: bytes) -> List[str]:
-        text = cls._extract_text(data)
-        return text.strip().split("\f")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            out_html = cls._extract_content(data, to=tmp_dir)
+            images = cls._extract_images_content(tmp_dir)
+            out_html = cls._insert_images(out_html, images).decode("utf-8")
+        pages = cls._split_html(out_html)
+        return pages
 
 
 @Converter.add_converter("epub")
