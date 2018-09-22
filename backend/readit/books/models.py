@@ -16,7 +16,7 @@ class Book(Document):
     cover = StringField()
     page_active = IntField(default=1)
 
-    meta = {"db_alias": "core", "collection": "books"}
+    meta = {"db_alias": "core", "collection": "books", "indexes": ["created_date"]}
 
     @classmethod
     def get_by_id(cls, id_: str) -> Union[Book, None]:
