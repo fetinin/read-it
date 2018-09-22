@@ -77,7 +77,8 @@ class Converter:
 
     def convert(self, content: bytes) -> List[str]:
         pages = self.converter.convert(content)
-        return [self._sanitize(page) for page in pages]
+        safe_pages = (self._sanitize(page) for page in pages)
+        return [page for page in safe_pages if page]
 
 
 @Converter.add_converter("txt")
