@@ -5,8 +5,7 @@
 
     <div v-else-if="books.length !== null" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
-      @deleted="onBookDelete(id)"
-      v-for="(book, id) in books"
+      v-for="book in books"
       :key="book.id"
       :book="book">
       </BookCover>
@@ -43,10 +42,6 @@ export default class BooksVue extends Vue {
     return this.$store.state.books;
   }
   private isLoading = false;
-
-  private onBookDelete(index: number) {
-    this.$store.commit('deleteBook', index);
-  }
 
   private created() {
     if (this.books === null) {

@@ -1,3 +1,4 @@
+import { updateArrayItem } from '@/tools';
 import { Book, User } from '@/types';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -15,14 +16,7 @@ export default new Vuex.Store({
     },
     updateBook(state, book: Book) {
       if (state.books !== null) {
-        const index = state.books.findIndex((v) => v.id === book.id);
-        if (index !== -1) {
-          state.books[index] = book;
-        } else {
-          console.error(
-            `Book with id ${book.id} not found and can't be updated.`,
-          );
-        }
+        state.books = updateArrayItem(state.books, book, 'id');
       }
     },
     deleteBook(state, bookID: string) {
