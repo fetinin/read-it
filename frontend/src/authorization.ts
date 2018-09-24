@@ -13,13 +13,13 @@ export const authorize = (token: string) => {
   const data: TokenData = jwt_decode(token);
   return axios.get(`/users/${data.userID}`).then((resp) => {
     const user: User = resp.data;
-    store.dispatch('saveUser', user);
+    store.commit('saveUser', user);
     localStorage.setItem('jwt', token);
   });
 };
 
 export const logout = () => {
-  store.dispatch('deleteUser');
+  store.commit('deleteUser');
   localStorage.removeItem('jwt');
   axios.defaults.headers.Authentication = null;
 };

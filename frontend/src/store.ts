@@ -41,25 +41,6 @@ export default new Vuex.Store({
       state.user = null;
     },
   },
-  actions: {
-    saveBooks({ commit }, books: Book[]) {
-      commit('saveBooks', books);
-    },
-    updateBook({ commit }, book: Book) {
-      commit('updateBook', book);
-    },
-    deleteBook({ commit }, bookID: string) {
-      commit('deleteBook', bookID);
-    },
-    clearBooks({ commit }) {
-      commit('clearBooks');
-    },
-    saveUser({ commit }, user: User) {
-      commit('saveUser', user);
-    },
-    deleteUser({ commit }, user: User) {
-      commit('deleteUser', user);
-    },
-  },
+  actions: {},
   strict: process.env.NODE_ENV !== 'production',
 });

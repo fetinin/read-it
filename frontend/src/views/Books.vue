@@ -45,7 +45,7 @@ export default class BooksVue extends Vue {
   private isLoading = false;
 
   private onBookDelete(index: number) {
-    this.$store.dispatch('deleteBook', index);
+    this.$store.commit('deleteBook', index);
   }
 
   private created() {
@@ -63,7 +63,7 @@ export default class BooksVue extends Vue {
               coverURL: el.cover,
             };
           });
-          this.$store.dispatch('saveBooks', books);
+          this.$store.commit('saveBooks', books);
           this.isLoading = false;
         })
         .catch((err) => console.log(err.response ? err.response : err));

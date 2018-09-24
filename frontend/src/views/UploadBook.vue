@@ -81,7 +81,7 @@ export default class BookUpload extends Vue {
         { timeout: 120000 }, // 2 minutes timeout
       )
       .then((response) => {
-        this.$store.dispatch('clearBooks');
+        this.$store.commit('clearBooks');
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
       .catch((err) => console.log(err.response));
