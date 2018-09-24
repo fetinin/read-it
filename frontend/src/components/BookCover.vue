@@ -15,7 +15,14 @@
 
         <router-link :to="{name: 'book', params: { bookID: book.id }}">
         <div class="card-image">
-            <img :src="book.coverURL ? book.coverURL : 'https://via.placeholder.com/200x300'" :alt="book.title" class="img-responsive">
+            <img v-if="book.coverURL" :src="book.coverURL" :alt="book.title" class="img-responsive">
+            <template v-else>
+              <img src="@/assets/book-cover.jpg" :alt="book.title" class="img-responsive">
+              <div class="img-text">
+                <p class="title">{{ book.title}}</p>
+                <p class="author">{{ book.author}}</p>
+              </div>
+            </template>
         </div>
         <div class="card-header">
             <div class="card-title h6">{{ book.title }}</div>
@@ -109,6 +116,7 @@ a {
 
 .card-image {
   height: 70%;
+  position: relative;
 }
 .card-image:first-child {
   padding-top: 10px;
@@ -126,5 +134,16 @@ a {
   text-align: center;
   padding: 0.4rem;
   height: 30%;
+}
+.img-text {
+  position: absolute;
+  text-align: center;
+  left: 15%;
+  top: 30%;
+  color: white;
+  max-width: 70%;
+}
+.img-text > .title {
+  font-weight: 700;
 }
 </style>

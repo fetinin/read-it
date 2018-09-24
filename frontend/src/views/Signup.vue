@@ -8,17 +8,17 @@
         <div class="auth-services">
             <span class='auth-service'>
             <a href="http://localhost:5000/auth/vk">
-              <img src="../assets/vk-logo.png" alt="">
+              <img src="@/assets/vk-logo.png" alt="">
             </a>
           </span>
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/google">
-              <img src="../assets/google-logo.png" alt="">
+              <img src="@/assets/google-logo.png" alt="">
             </a>
           </span>
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/github">
-              <img src="../assets/ghub-icon-w-64.png" alt="">
+              <img src="@/assets/ghub-icon-w-64.png" alt="">
             </a>
           </span>
         </div>
