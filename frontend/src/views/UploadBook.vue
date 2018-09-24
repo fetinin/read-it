@@ -1,5 +1,7 @@
 <template>
 <div class="upload-form">
+  <loader-modal ref='loader'></loader-modal>
+
     <form class="form-group" @submit.prevent="save" enctype="multipart/form-data">
         <h2 class="header">Загрузить книгу</h2>
         <label class="form-label" for="title">Название</label>
@@ -36,6 +38,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { File, Book } from '@/types.ts';
+import LoaderModal from '@/components/LoaderModal.vue';
 
 const STATUS = {
   INITIAL: 0,
@@ -45,7 +48,7 @@ const STATUS = {
 };
 
 @Component({
-  components: {},
+  components: { LoaderModal },
 })
 export default class BookUpload extends Vue {
   public title = '';
@@ -68,6 +71,7 @@ export default class BookUpload extends Vue {
   }
 
   private save(formData: any) {
+    (this.$refs.loader as LoaderModal).show();
     this.$http
       .post(
         '/books',
@@ -84,7 +88,10 @@ export default class BookUpload extends Vue {
         this.$store.commit('clearBooks');
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => {
+        console.log(err.response);
+      })
+      .finally(() => (this.$refs.loader as LoaderModal).hide());
   }
 
   private onBookUpload(files: FileList) {

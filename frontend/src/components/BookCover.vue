@@ -1,5 +1,7 @@
 <template>
     <div class="book-cover card">
+      <loader-modal ref="loader"></loader-modal>
+
       <modal v-if="showDeleteModal" @is-confirmed="onDeleteConfirm">
         <template slot="title">Удалить книгу</template>
         <template slot="content"><p>Вы действительно хотите удалить книгу?</p></template>
@@ -38,19 +40,21 @@
                 <li class="menu-item"><a href="#" @click.prevent="showDeleteModal=true"><i class="icon icon-delete"></i> Удалить</a></li>
               </ul>
         </div>
-    </div>
+    </div>   
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Book as BookType } from '@/types.ts';
 import Modal from '@/components/Modal.vue';
+import LoaderModal from '@/components/LoaderModal.vue';
 import BookEditForm from '@/components/BookEditForm.vue';
 
 @Component({
   components: {
     Modal,
     BookEditForm,
+    LoaderModal,
   },
 })
 export default class Book extends Vue {
@@ -60,6 +64,8 @@ export default class Book extends Vue {
   public showDeleteModal = false;
   public showEditModal = false;
 
+  private loader!: LoaderModal;
+
   public editBook() {
     const formBookData = (this.$refs.bookEditForm as BookEditForm).data;
     const newBookData = {
@@ -67,16 +73,22 @@ export default class Book extends Vue {
       author: formBookData.author,
       cover: formBookData.coverURL,
     };
-    this.$http.patch(`/books/${this.book.id}`, newBookData).then((resp) => {
-      this.$store.commit('updateBook', { ...this.book, ...newBookData });
-    });
+    this.loader.show();
+    this.$http
+      .patch(`/books/${this.book.id}`, newBookData)
+      .then((resp) => {
+        this.$store.commit('updateBook', { ...this.book, ...newBookData });
+      })
+      .finally(() => this.loader.hide());
   }
 
   public deleteBook() {
+    this.loader.show();
     this.$http
       .delete(`/books/${this.book.id}`)
       .then((resp) => this.$store.commit('deleteBook', this.book.id))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => this.loader.hide());
   }
 
   private onEditConfirm(isConfirmed: boolean) {
@@ -91,6 +103,10 @@ export default class Book extends Vue {
     if (isConfirmed) {
       this.deleteBook();
     }
+  }
+
+  private mounted() {
+    this.loader = this.$refs.loader as LoaderModal;
   }
 }
 </script>
