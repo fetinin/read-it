@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { File } from '@/types.ts';
+import { File, Book } from '@/types.ts';
 
 const STATUS = {
   INITIAL: 0,
@@ -81,6 +81,7 @@ export default class BookUpload extends Vue {
         { timeout: 120000 }, // 2 minutes timeout
       )
       .then((response) => {
+        this.$store.dispatch('clearBooks');
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
       .catch((err) => console.log(err.response));
@@ -94,7 +95,6 @@ export default class BookUpload extends Vue {
     this.bookFile.name = file.name;
     this.bookFile.reader.readAsDataURL(file);
     this.currentStatus = STATUS.SAVING;
-    console.log(files);
   }
   private onBookCoverUpload(files: FileList) {
     if (!files.length) {

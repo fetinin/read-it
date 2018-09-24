@@ -1,4 +1,4 @@
-import { User } from '@/types';
+import { Book, User } from '@/types';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -7,8 +7,33 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null as null | User,
+    books: null as null | Book[],
   },
   mutations: {
+    saveBooks(state, books: Book[]) {
+      state.books = books;
+    },
+    updateBook(state, book: Book) {
+      if (state.books !== null) {
+        const index = state.books.findIndex((v) => v.id === book.id);
+        if (index !== -1) {
+          state.books[index] = book;
+        } else {
+          console.error(
+            `Book with id ${book.id} not found and can't be updated.`,
+          );
+        }
+      }
+    },
+    deleteBook(state, bookID: string) {
+      if (state.books !== null) {
+        const index = state.books.findIndex((v) => v.id === bookID);
+        state.books.splice(index, 1);
+      }
+    },
+    clearBooks(state) {
+      state.books = null;
+    },
     saveUser(state, user: User) {
       state.user = user;
     },
@@ -17,6 +42,18 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    saveBooks({ commit }, books: Book[]) {
+      commit('saveBooks', books);
+    },
+    updateBook({ commit }, book: Book) {
+      commit('updateBook', book);
+    },
+    deleteBook({ commit }, bookID: string) {
+      commit('deleteBook', bookID);
+    },
+    clearBooks({ commit }) {
+      commit('clearBooks');
+    },
     saveUser({ commit }, user: User) {
       commit('saveUser', user);
     },

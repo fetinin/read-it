@@ -1,9 +1,9 @@
 <template>
   <div class="books container grid-xl">
 
-    <div v-if="!isLoaded" class="loading loading-lg"></div>
+    <div v-if="isLoading" class="loading loading-lg"></div>
 
-    <div v-else-if="books.length" class="columns">
+    <div v-else-if="books.length !== null" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
       @deleted="onBookDelete(id)"
       v-for="(book, id) in books"
@@ -22,6 +22,7 @@
         <router-link class="btn btn-primary" to='/upload-book' tag="button">Добавить книгу</router-link>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -38,32 +39,35 @@ import { Book as BookType } from '@/types';
   },
 })
 export default class BooksVue extends Vue {
-  public books: BookType[] = [];
-  private isLoaded = false;
+  public get books() {
+    return this.$store.state.books;
+  }
+  private isLoading = false;
 
-  private onBookDelete(bookID: number) {
-    this.books.splice(bookID, 1);
+  private onBookDelete(index: number) {
+    this.$store.dispatch('deleteBook', index);
   }
 
   private created() {
-    // this.books = []; // Load offline
-    this.$http
-      .get('/books')
-      .then((resp) => {
-        this.books = resp.data.map((el: any): BookType => {
-          return {
-            id: el.id,
-            title: el.title,
-            author: el.author,
-            pages: [],
-            coverURL: el.cover,
-          };
-        });
-        this.isLoaded = true;
-      })
-      .catch((err) => console.log(err.response ? err.response : err));
+    if (this.books === null) {
+      this.isLoading = true;
+      this.$http
+        .get('/books')
+        .then((resp) => {
+          const books = resp.data.map((el: any): BookType => {
+            return {
+              id: el.id,
+              title: el.title,
+              author: el.author,
+              pages: [],
+              coverURL: el.cover,
+            };
+          });
+          this.$store.dispatch('saveBooks', books);
+          this.isLoading = false;
+        })
+        .catch((err) => console.log(err.response ? err.response : err));
+    }
   }
 }
 </script>
-<style scoped>
-</style>

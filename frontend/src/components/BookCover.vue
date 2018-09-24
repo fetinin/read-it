@@ -61,25 +61,22 @@ export default class Book extends Vue {
   public showEditModal = false;
 
   public editBook() {
-    const newBookData = (this.$refs.bookEditForm as BookEditForm).data;
-    this.$http
-      .patch(`/books/${this.book.id}`, {
-        title: newBookData.title,
-        author: newBookData.author,
-        cover: newBookData.coverURL,
-      })
-      .then((resp) => {
-        this.book.title = newBookData.title;
-        this.book.author = newBookData.author;
-        this.book.coverURL = newBookData.coverURL;
-      });
+    const formBookData = (this.$refs.bookEditForm as BookEditForm).data;
+    const newBookData = {
+      title: formBookData.title,
+      author: formBookData.author,
+      cover: formBookData.coverURL,
+    };
+    this.$http.patch(`/books/${this.book.id}`, newBookData).then((resp) => {
+      this.$store.commit('updateBook', { ...this.book, ...newBookData });
+    });
   }
 
   public deleteBook() {
     this.$http
       .delete(`/books/${this.book.id}`)
-      .then((resp) => this.$emit('deleted'))
-      .catch((err) => console.log(err));
+      .then((resp) => this.$store.commit('deleteBook', this.book.id))
+      .catch((err) => console.error(err));
   }
 
   private onEditConfirm(isConfirmed: boolean) {

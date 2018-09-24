@@ -42,7 +42,6 @@ export default class Book extends Vue {
   };
 
   private onBookCoverUpload(files: FileList) {
-    console.log(this.data.coverURL);
     if (files.length) {
       const file = files[0];
       this.bookCoverFile.name = file.name;
@@ -50,7 +49,7 @@ export default class Book extends Vue {
     }
   }
 
-  private mounted() {
+  private created() {
     this.bookCoverFile.reader.onloadend = (event: ProgressEvent) => {
       const result = (event.target as FileReader).result as string;
       this.data.coverURL = result;
