@@ -69,13 +69,17 @@ export default class BookUpload extends Vue {
 
   private save(formData: any) {
     this.$http
-      .post('/books', {
-        title: this.title,
-        author: this.author,
-        file: (this.bookFile.reader.result as string).split('base64,').pop(),
-        format: this.bookFile.name.split('.').pop(),
-        cover: this.bookCoverFile.reader.result,
-      })
+      .post(
+        '/books',
+        {
+          title: this.title,
+          author: this.author,
+          file: (this.bookFile.reader.result as string).split('base64,').pop(),
+          format: this.bookFile.name.split('.').pop(),
+          cover: this.bookCoverFile.reader.result,
+        },
+        { timeout: 120000 }, // 2 minutes timeout
+      )
       .then((response) => {
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
