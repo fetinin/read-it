@@ -1,5 +1,5 @@
 <template>
-    <div class="book container">
+    <div v-if='book !== null' class="book container">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title">{{book.title}} - {{book.author}}</p>
           <transition name="fade-page" mode="out-in">
@@ -8,6 +8,8 @@
           <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
       </div>
     </div>
+
+    <div v-else class="loading loading-lg" id="book-loader"></div>
 </template>
 
 <script lang="ts">
@@ -23,15 +25,14 @@ import { Book } from '@/types';
   },
 })
 export default class BookView extends Vue {
-  public bookData: Book = { id: '', title: '', author: '', pages: [], coverURL: '' };
+  public book: Book | null = null;
   public currentPage = 1;
 
-  public get book(): Book {
-    return this.bookData;
-  }
-
   public get pageTotal(): number {
-    return this.book.pages.length;
+    if (this.book !== null) {
+      return this.book.pages.length;
+    }
+    return 0;
   }
 
   public nextPage() {
@@ -66,13 +67,13 @@ export default class BookView extends Vue {
   private mounted() {
     const bookID = this.$route.params.bookID;
     this.$http.get(`books/${bookID}`).then((resp) => {
-      this.bookData = {
+      this.book = {
         id: resp.data.book,
         author: resp.data.author,
         title: resp.data.title,
         pages: resp.data.pages,
         coverURL: resp.data.cover,
-      };
+      } as Book;
     });
   }
 
@@ -82,7 +83,7 @@ export default class BookView extends Vue {
 }
 </script>
 <style>
-/* Styles are not scopes due to the fact that scoped styles are not applied to raw html */
+/* Styles are not scoped due to the fact that scoped styles are not applied to raw html */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 .pages {
   height: 90vh;
@@ -109,5 +110,8 @@ export default class BookView extends Vue {
 .fade-page-enter,
 .fade-page-leave-to {
   opacity: 0;
+}
+#book-loader {
+  margin: auto;
 }
 </style>
