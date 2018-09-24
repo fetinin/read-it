@@ -99,12 +99,15 @@ export default class Book extends Vue {
 </script>
 
 <style scoped>
+.book-cover {
+  position: relative;
+}
 .book-actions {
   position: absolute;
   align-self: flex-end;
   opacity: 0.85;
   padding: 0;
-  margin-top: 19.3rem; /* todo: find another way */
+  bottom: 10px;
 }
 .book-actions:hover {
   opacity: 1;

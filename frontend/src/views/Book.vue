@@ -2,7 +2,7 @@
     <div class="book container">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title">{{book.title}} - {{book.author}}</p>
-          <transition name="fade" mode="out-in">
+          <transition name="fade-page" mode="out-in">
             <p class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></p>
           </transition>
           <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
@@ -81,7 +81,8 @@ export default class BookView extends Vue {
   }
 }
 </script>
-<style scoped>
+<style>
+/* Styles are not scopes due to the fact that scoped styles are not applied to raw html */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 .pages {
   height: 90vh;
@@ -97,13 +98,16 @@ export default class BookView extends Vue {
   height: 100%;
   max-width: 960px;
 }
+.page img {
+  max-width: 100%;
+}
 /* Animation */
-.fade-enter-active,
-.fade-leave-active {
+.fade-page-enter-active,
+.fade-page-leave-active {
   transition: opacity 0.3s;
 }
-.fade-enter,
-.fade-leave-to {
+.fade-page-enter,
+.fade-page-leave-to {
   opacity: 0;
 }
 </style>
