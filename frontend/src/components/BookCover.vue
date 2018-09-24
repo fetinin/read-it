@@ -141,7 +141,7 @@ a {
   left: 15%;
   top: 30%;
   color: white;
-  max-width: 70%;
+  width: 70%;
 }
 .img-text > .title {
   font-weight: 700;
