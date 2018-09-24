@@ -86,7 +86,7 @@ export default class Book extends Vue {
     this.loader.show();
     this.$http
       .delete(`/books/${this.book.id}`)
-      .then((resp) => this.$store.commit('deleteBook', this.book.id))
+      .then((resp) => this.$store.commit('deleteBook', this.book))
       .catch((err) => console.error(err))
       .finally(() => this.loader.hide());
   }

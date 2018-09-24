@@ -1,4 +1,4 @@
-import { updateArrayItem } from '@/tools';
+import { removeArrayItem, updateArrayItem } from '@/tools';
 import { Book, User } from '@/types';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -19,10 +19,9 @@ export default new Vuex.Store({
         state.books = updateArrayItem(state.books, book, 'id');
       }
     },
-    deleteBook(state, bookID: string) {
+    deleteBook(state, book: Book) {
       if (state.books !== null) {
-        const index = state.books.findIndex((v) => v.id === bookID);
-        state.books.splice(index, 1);
+        state.books = removeArrayItem(state.books, book, 'id');
       }
     },
     clearBooks(state) {
