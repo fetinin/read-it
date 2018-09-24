@@ -18,7 +18,7 @@
           </span>
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/github">
-              <img src="@/assets/ghub-icon-w-64.png" alt="">
+              <img src="@/assets/ghub-logo.png" alt="">
             </a>
           </span>
         </div>
