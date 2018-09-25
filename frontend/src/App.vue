@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <vue-snotify></vue-snotify>
     <div v-if="user" id="nav">
       <NavBar></NavBar>
     </div>

@@ -79,6 +79,12 @@ export default class Book extends Vue {
       .then((resp) => {
         this.$store.commit('updateBook', { ...this.book, ...newBookData });
       })
+      .catch((err) => {
+        console.error(err);
+        this.$snotify.error(
+          'Не удалось обновить информацию о книге. Сервер временно недоступен.',
+        );
+      })
       .finally(() => this.loader.hide());
   }
 
@@ -87,7 +93,10 @@ export default class Book extends Vue {
     this.$http
       .delete(`/books/${this.book.id}`)
       .then((resp) => this.$store.commit('deleteBook', this.book))
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err);
+        this.$snotify.error('Не удалось удалить книгу. Сервер временно недоступен.');
+      })
       .finally(() => this.loader.hide());
   }
 

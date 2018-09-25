@@ -29,7 +29,8 @@ import Modal from '@/components/Modal.vue';
 
 @Component
 export default class Book extends Vue {
-  @Prop() public book!: BookType;
+  @Prop()
+  public book!: BookType;
 
   public bookCoverFile = { name: '', reader: new FileReader() };
 
@@ -44,6 +45,14 @@ export default class Book extends Vue {
   private onBookCoverUpload(files: FileList) {
     if (files.length) {
       const file = files[0];
+      const fileExtension = file.name.split('.').pop();
+      if (
+        fileExtension !== undefined &&
+        !['png', 'jpg', 'jpeg'].includes(fileExtension.toLowerCase())
+      ) {
+        this.$snotify.warning('Картинка должна быть в формате .jpg или .png.');
+        return;
+      }
       this.bookCoverFile.name = file.name;
       this.bookCoverFile.reader.readAsDataURL(file);
     }

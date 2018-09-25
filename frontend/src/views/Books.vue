@@ -3,7 +3,7 @@
 
     <div v-if="isLoading" class="loading loading-lg"></div>
 
-    <div v-else-if="books.length !== null" class="columns">
+    <div v-else-if="books !== null" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
       v-for="book in books"
       :key="book.id"
@@ -49,19 +49,26 @@ export default class BooksVue extends Vue {
       this.$http
         .get('/books')
         .then((resp) => {
-          const books = resp.data.map((el: any): BookType => {
-            return {
-              id: el.id,
-              title: el.title,
-              author: el.author,
-              pages: [],
-              coverURL: el.cover,
-            };
-          });
+          const books = resp.data.map(
+            (el: any): BookType => {
+              return {
+                id: el.id,
+                title: el.title,
+                author: el.author,
+                pages: [],
+                coverURL: el.cover,
+              };
+            },
+          );
           this.$store.commit('saveBooks', books);
-          this.isLoading = false;
         })
-        .catch((err) => console.log(err.response ? err.response : err));
+        .catch((err) => {
+          console.log(err.response ? err.response : err);
+          this.$snotify.error(
+            'Не удалось загрузить книги. Попробуйте обновить страницу.',
+          );
+        })
+        .finally(() => (this.isLoading = false));
     }
   }
 }

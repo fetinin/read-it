@@ -66,15 +66,26 @@ export default class BookView extends Vue {
   }
   private mounted() {
     const bookID = this.$route.params.bookID;
-    this.$http.get(`books/${bookID}`).then((resp) => {
-      this.book = {
-        id: resp.data.book,
-        author: resp.data.author,
-        title: resp.data.title,
-        pages: resp.data.pages,
-        coverURL: resp.data.cover,
-      } as Book;
-    });
+    this.$http
+      .get(`books/${bookID}`)
+      .then((resp) => {
+        this.book = {
+          id: resp.data.book,
+          author: resp.data.author,
+          title: resp.data.title,
+          pages: resp.data.pages,
+          coverURL: resp.data.cover,
+        } as Book;
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response && err.response.status === 404) {
+          this.$snotify.error('Не удалось найти книгу.');
+        } else {
+          this.$snotify.error('Не удалось загрузить книгу.');
+        }
+        this.$router.push({ name: 'books' });
+      });
   }
 
   private destroyed() {

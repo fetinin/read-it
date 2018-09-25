@@ -20,8 +20,8 @@
             <input type="file" @change="onBookUpload($event.target.files)"
               accept="application/pdf,.txt,.epub" class="input-file" id="book" rяequired>
             <p>
-              Перетащите вашу книгу сюда<br> или кликните чтобы открыть обозреватель.<br>
-              Сейчас поддерживаются форматы: pdf, epub, txt.
+              Перетащи книгу сюда<br> или кликни чтобы открыть обозреватель.<br>
+              Поддерживаются форматы: {{supportedBookFormats.toString()}}.
             </p>
           </div>
         </div>
@@ -40,12 +40,12 @@
               <div :class="['dropbox-img', 'text-center', {'dropbox-no-image':  !coverImgData}]" :style="{ 'background-image': `url(${coverImgData})` }">
                 <input type="file" @change="onBookCoverUpload($event.target.files)" accept="image/*" class="input-file" id="book-cover">
                 <p v-if="!coverImgData">
-                  Перетащите обложку книги сюда<br> или кликните чтобы открыть обозреватель
+                  Перетащи обложку книги сюда<br> или кликни чтобы открыть обозреватель
                 </p>
               </div>
             </div>
           </div>
-          <button class="btn btn-primary">Готово!</button>
+          <button class="btn btn-primary" :disabled="title === '' || author === ''">Готово!</button>
         </div>
     </form>
 </div>
@@ -72,6 +72,8 @@ export default class BookUpload extends Vue {
   public bookFile: File = { name: '', reader: new FileReader() };
   public bookCoverFile: File = { name: '', reader: new FileReader() };
   public coverImgData: null | string = null;
+  public supportedBookFormats = ['pdf', 'txt', 'epub'];
+  public supportedBookCoverFormats = ['png', 'jpg', 'jpeg'];
 
   private currentStep = 1;
 
@@ -95,7 +97,9 @@ export default class BookUpload extends Vue {
         this.$router.push({ name: 'book', params: { bookID: response.data.id } });
       })
       .catch((err) => {
-        console.log(err.response);
+        console.error(err.response);
+        this.$snotify.error('Не удалось загрузить книгу. Попробуйте ещё раз.');
+        this.currentStep = 1;
       })
       .finally(() => loader.hide());
   }
@@ -105,6 +109,14 @@ export default class BookUpload extends Vue {
       return;
     }
     const file = files[0];
+    const fileExtension = file.name.split('.').pop();
+    if (
+      fileExtension !== undefined &&
+      !this.supportedBookFormats.includes(fileExtension.toLowerCase())
+    ) {
+      this.$snotify.warning('Этот формат книги пока не поддерижвается.');
+      return;
+    }
     this.bookFile.name = file.name;
     this.bookFile.reader.readAsDataURL(file);
     this.bookFile.reader.onloadend = () => this.currentStep++;
@@ -114,6 +126,14 @@ export default class BookUpload extends Vue {
       return;
     }
     const file = files[0];
+    const fileExtension = file.name.split('.').pop();
+    if (
+      fileExtension !== undefined &&
+      !this.supportedBookCoverFormats.includes(fileExtension.toLowerCase())
+    ) {
+      this.$snotify.warning('Картинка должна быть в формате .jpg или .png.');
+      return;
+    }
     this.bookCoverFile.name = file.name;
     this.bookCoverFile.reader.readAsDataURL(file);
     return;
