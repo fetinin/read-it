@@ -13,11 +13,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Watch, Vue } from 'vue-property-decorator';
 
 import BookCover from '@/components/BookCover.vue';
 import books from '@/data/books';
 import { Book } from '@/types';
+import { setTimeout, clearTimeout } from 'timers';
 
 @Component({
   components: {
@@ -27,6 +28,8 @@ import { Book } from '@/types';
 export default class BookView extends Vue {
   public book: Book | null = null;
   public currentPage = 1;
+
+  private saveOnTimeoutID: NodeJS.Timer | null = null;
 
   public get pageTotal(): number {
     if (this.book !== null) {
@@ -45,6 +48,21 @@ export default class BookView extends Vue {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
     }
+  }
+
+  @Watch('currentPage')
+  private onPageChange(newPage: number, prevPage: number) {
+    if (this.saveOnTimeoutID !== null) {
+      clearTimeout(this.saveOnTimeoutID);
+    }
+    const savePage = () =>
+      this.$http
+        .patch(`books/${(this.book as Book).id}`, { page_active: this.currentPage })
+        .catch((err) => {
+          console.error(err);
+          this.$snotify.error('Не удалось запомнить страницу.');
+        });
+    this.saveOnTimeoutID = setTimeout(savePage, 3000);
   }
 
   private handleScroll(evt: Event) {
@@ -72,18 +90,20 @@ export default class BookView extends Vue {
   private created() {
     document.addEventListener('keydown', this.handleKeyPress);
   }
+
   private mounted() {
     const bookID = this.$route.params.bookID;
     this.$http
       .get(`books/${bookID}`)
       .then((resp) => {
         this.book = {
-          id: resp.data.book,
+          id: resp.data.id,
           author: resp.data.author,
           title: resp.data.title,
           pages: resp.data.pages,
           coverURL: resp.data.cover,
         } as Book;
+        this.currentPage = resp.data.page_active;
       })
       .catch((err) => {
         console.error(err);
