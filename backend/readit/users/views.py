@@ -44,7 +44,7 @@ OAUTH_URLS = {
 
 
 def auth_user(auth_service_name: str, code: http.QueryParam):
-    if not code:
+    if not code and auth_service_name != AuthTypes.guest.name:
         # redirect to oauth service
         try:
             auth_path: dict = OAUTH_URLS[auth_service_name]

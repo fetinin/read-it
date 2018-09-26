@@ -6,6 +6,7 @@ import requests
 from enum import IntEnum
 from typing import ClassVar, Dict, Type, Tuple, Optional
 from readit import settings
+from .models import User as UserDB
 
 User = namedtuple("User", "name surname id avatar")
 
@@ -14,6 +15,7 @@ class AuthTypes(IntEnum):
     vk = 0
     google = 1
     github = 2
+    guest = 3
 
     @classmethod
     def options(cls):
@@ -168,3 +170,18 @@ class GithubClient(AuthClientBase):
         user = response.json()
         photo = base64.b64encode(requests.get(user["avatar_url"]).content)
         return User(id=str(user["id"]), name=user["name"], surname="", avatar=photo)
+
+
+class GuestClient(AuthClientBase):
+    service_type = AuthTypes.guest
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.token = "guest"
+        self.user: User = self._get_user()
+        self.user_id = self.user.id
+
+    @staticmethod
+    def _get_user():
+        user = UserDB.objects(auth_type=AuthTypes.guest.value).first()
+        return User(name=user.name, surname="", id=str(user.id), avatar="")

@@ -3,7 +3,16 @@ from __future__ import annotations
 import datetime
 from typing import Union
 
-from mongoengine import StringField, DateTimeField, ListField, Document, IntField
+from mongoengine import (
+    StringField,
+    DateTimeField,
+    ListField,
+    Document,
+    IntField,
+    ReferenceField,
+)
+
+from readit.users.models import User
 
 
 class Book(Document):
@@ -14,7 +23,7 @@ class Book(Document):
     author = StringField(max_length=50)
     cover = StringField()
     page_active = IntField(default=1)
-    owner_id = StringField(max_length=36)
+    owner_id = ReferenceField(User)
 
     meta = {
         "db_alias": "core",
