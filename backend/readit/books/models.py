@@ -4,7 +4,6 @@ import datetime
 from typing import Union
 
 from mongoengine import StringField, DateTimeField, ListField, Document, IntField
-from mongoengine import errors as mongoerrors
 
 
 class Book(Document):
@@ -15,12 +14,14 @@ class Book(Document):
     author = StringField(max_length=50)
     cover = StringField()
     page_active = IntField(default=1)
+    owner_id = StringField(max_length=36)
 
-    meta = {"db_alias": "core", "collection": "books", "indexes": ["created_date"]}
+    meta = {
+        "db_alias": "core",
+        "collection": "books",
+        "indexes": ["created_date", "owner_id"],
+    }
 
     @classmethod
-    def get_by_id(cls, id_: str) -> Union[Book, None]:
-        try:
-            return cls.objects.with_id(id_)
-        except mongoerrors.ValidationError:
-            return None
+    def get_user_book(cls, id_: str, owner_id: str) -> Union[Book, None]:
+        return cls.objects(pk=id_, owner_id=owner_id).first()
