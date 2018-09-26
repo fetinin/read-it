@@ -1,5 +1,5 @@
 <template>
-    <div v-if='book !== null' class="book container">
+    <div v-if='book !== null' class="book container" v-touch:swipe="handleSwipe">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title">{{book.title}} - {{book.author}}</p>
           <transition name="fade-page" mode="out-in">
@@ -48,7 +48,15 @@ export default class BookView extends Vue {
   }
 
   private handleScroll(evt: Event) {
-    // console.log(evt)
+    // console.log(evt);
+  }
+
+  private handleSwipe(direction: string) {
+    if (direction === 'left') {
+      this.nextPage();
+    } else if (direction === 'right') {
+      this.prevPage();
+    }
   }
 
   private handleKeyPress(evt: KeyboardEvent) {
