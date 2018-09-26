@@ -3,7 +3,7 @@
 
     <div v-if="isLoading" class="loading loading-lg"></div>
 
-    <div v-else-if="books !== null" class="columns">
+    <div v-else-if="books !== null && books.length" class="columns">
       <BookCover class="column col-2 col-mg-4 col-md-4 col-sm-4 col-xs-6"
       v-for="book in books"
       :key="book.id"
@@ -73,3 +73,8 @@ export default class BooksVue extends Vue {
   }
 }
 </script>
+<style scoped>
+.empty {
+  background: none;
+}
+</style>
