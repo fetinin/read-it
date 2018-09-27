@@ -1,7 +1,5 @@
 <template>
 <div class="login-form">
-    <!-- TODO -->
-    <!-- PLACE LOGO HERE -->
     <div class="form-group">
         <h2 class="header">Регистрация</h2>
         <p class="note text-center">Войдите с помощью учетной записи в других сервисах</p>
@@ -30,7 +28,7 @@
             </a>
           </span>
         </div>
-        <p class="note text-center">Познакомьтесь с сервисом в роли гостя</p>
+        <p class="note text-center">Познакомьтесь с сайтом в роли гостя</p>
     </div>
 </div>
 </template>
