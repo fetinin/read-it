@@ -10,6 +10,7 @@ apistar-cors = "*"
 chardet = "*"
 bleach = "*"
 dnspython = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 cookiecutter = "*"

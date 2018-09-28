@@ -18,4 +18,4 @@ class Secrets:
 class Server:
     host = "localhost"
     port = 5000
-    in_debug = os.environ.get("APP_DEBUG", False)
+    in_debug: bool = os.environ.get("APP_DEBUG", "false").lower() == "true"
