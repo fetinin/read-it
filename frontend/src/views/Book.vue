@@ -141,6 +141,9 @@ export default class BookView extends Vue {
 .page img {
   max-width: 100%;
 }
+#book-loader {
+  margin: auto;
+}
 /* Animation */
 .fade-page-enter-active,
 .fade-page-leave-active {
@@ -149,8 +152,5 @@ export default class BookView extends Vue {
 .fade-page-enter,
 .fade-page-leave-to {
   opacity: 0;
-}
-#book-loader {
-  margin: auto;
 }
 </style>

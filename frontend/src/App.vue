@@ -5,7 +5,9 @@
       <NavBar></NavBar>
     </div>
     <div id="page-content">
-      <router-view/>
+      <transition name="fade-page" mode="out-in">
+        <router-view/>
+      </transition>
     </div>
   </div>
 </template>
@@ -51,5 +53,14 @@ html,
 body,
 #app {
   height: 100%;
+}
+/* Animation */
+.fade-page-enter-active,
+.fade-page-leave-active {
+  transition: opacity 0.1s;
+}
+.fade-page-enter,
+.fade-page-leave-to {
+  opacity: 0;
 }
 </style>
