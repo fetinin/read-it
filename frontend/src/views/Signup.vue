@@ -16,7 +16,7 @@
           </span>
           <span class='auth-service'>
             <a :href="backendURL + '/auth/github'">
-              <img src="@/assets/ghub-logo.png" alt="Github" class="bg-dark">
+              <img src="@/assets/ghub-logo.png" alt="Github">
             </a>
           </span>
         </div>
