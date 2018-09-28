@@ -1,5 +1,5 @@
 <template>
-<header class="navbar">
+<header v-if="user" class="navbar">
   <section class="navbar-section">
     <router-link class="btn btn-link" to='/books'><img src="@/assets/icons/book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Книги</span></router-link>
     <router-link class="btn btn-link" to='/upload-book'><img src="@/assets/icons/add_book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Добавить книгу</span></router-link>
@@ -19,6 +19,10 @@
         </ul>
       </div>
   </section>
+</header>
+
+<header v-else class="navbar navbar-no-user">
+  <section class="navbar-center"><img src="@/assets/logo.png" alt="ReadIT logo" class="img-responsive"></section>
 </header>
 </template>
 
@@ -58,5 +62,8 @@ div.user > * {
 .img-icon {
   height: 25px;
   margin-right: 5px;
+}
+.navbar-no-user {
+  justify-content: center;
 }
 </style>
