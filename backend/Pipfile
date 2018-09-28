@@ -13,7 +13,6 @@ dnspython = "*"
 sentry-sdk = "*"
 
 [dev-packages]
-cookiecutter = "*"
 pytest = "*"
 black = "*"
 mypy = "*"
