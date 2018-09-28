@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser';
 import Vue from 'vue';
 import Router from 'vue-router';
 
@@ -61,6 +62,7 @@ export default new Router({
             .catch((err) => {
               console.error('Failed to authorize');
               console.error(err);
+              Sentry.captureException(err);
               next({ name: 'signup' });
             });
         }

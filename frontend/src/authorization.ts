@@ -1,5 +1,6 @@
 import store from '@/store';
 import { User } from '@/types';
+import * as Sentry from '@sentry/browser';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
@@ -15,6 +16,9 @@ export const authorize = (token: string) => {
     const user: User = resp.data;
     store.commit('saveUser', user);
     localStorage.setItem('jwt', token);
+    Sentry.configureScope((scope) =>
+      scope.setUser({ id: user.id, username: user.name + user.surname }),
+    );
   });
 };
 
@@ -22,4 +26,6 @@ export const logout = () => {
   store.commit('deleteUser');
   localStorage.removeItem('jwt');
   axios.defaults.headers.Authentication = null;
+
+  Sentry.configureScope((scope) => scope.clear());
 };

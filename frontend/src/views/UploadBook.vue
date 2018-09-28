@@ -55,6 +55,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { File, Book } from '@/types.ts';
 import LoaderModal from '@/components/LoaderModal.vue';
+import * as Sentry from '@sentry/browser';
+import { SentryError } from 'node_modules/@sentry/core/dist';
 
 const FILE_LOAD_STATUS = {
   INITIAL: 0,
@@ -98,6 +100,8 @@ export default class BookUpload extends Vue {
       })
       .catch((err) => {
         console.error(err.response);
+        Sentry.addBreadcrumb({ data: { response: err.response } });
+        Sentry.captureException(err);
         this.$snotify.error('Не удалось загрузить книгу. Попробуйте ещё раз.');
         this.currentStep = 1;
       })
