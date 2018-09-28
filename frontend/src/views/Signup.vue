@@ -6,17 +6,17 @@
         <div class="auth-services">
           <span class='auth-service'>
           <a href="http://localhost:5000/auth/vk">
-            <img src="@/assets/vk-logo.png" alt="">
+            <img src="@/assets/vk-logo.png" alt="VKontakte">
           </a>
           </span>
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/google">
-              <img src="@/assets/google-logo.png" alt="">
+              <img src="@/assets/google-logo.png" alt="Google">
             </a>
           </span>
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/github">
-              <img src="@/assets/ghub-logo.png" alt="">
+              <img src="@/assets/ghub-logo.png" alt="Github" class="bg-dark">
             </a>
           </span>
         </div>
@@ -24,7 +24,7 @@
         <div class="auth-services">
           <span class='auth-service'>
             <a href="http://localhost:5000/auth/guest">
-              <img src="@/assets/guest-logo.png" alt="">
+              <img src="@/assets/guest-logo.png" alt="Guest" class="bg-dark">
             </a>
           </span>
         </div>
@@ -58,13 +58,17 @@ export default class Signup extends Vue {}
 .note {
   color: #acb3c2;
 }
+.bg-dark {
+  background-color: hsla(221, 15%, 40%, 1);
+}
 .auth-service img {
   border-radius: 35px;
-  background-color: #acb3c2;
   width: 64px;
+  box-shadow: 0px 1px 3px 0px black;
+  opacity: 0.7;
 }
 .auth-service img:hover {
   border-radius: 35px;
-  background-color: black;
+  opacity: 1;
 }
 </style>
