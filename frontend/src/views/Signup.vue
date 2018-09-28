@@ -5,17 +5,17 @@
         <p class="note text-center">Войдите с помощью учетной записи в других сервисах</p>
         <div class="auth-services">
           <span class='auth-service'>
-          <a href="http://localhost:5000/auth/vk">
+          <a :href="backendURL + '/auth/vk'">
             <img src="@/assets/vk-logo.png" alt="VKontakte">
           </a>
           </span>
           <span class='auth-service'>
-            <a href="http://localhost:5000/auth/google">
+            <a :href="backendURL + '/auth/google'">
               <img src="@/assets/google-logo.png" alt="Google">
             </a>
           </span>
           <span class='auth-service'>
-            <a href="http://localhost:5000/auth/github">
+            <a :href="backendURL + '/auth/github'">
               <img src="@/assets/ghub-logo.png" alt="Github" class="bg-dark">
             </a>
           </span>
@@ -23,7 +23,7 @@
         <div class="divider text-center" data-content="или"></div>
         <div class="auth-services">
           <span class='auth-service'>
-            <a href="http://localhost:5000/auth/guest">
+            <a :href="backendURL + '/auth/guest'">
               <img src="@/assets/guest-logo.png" alt="Guest" class="bg-dark">
             </a>
           </span>
@@ -39,7 +39,9 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({
   components: {},
 })
-export default class Signup extends Vue {}
+export default class Signup extends Vue {
+  private backendURL = process.env.VUE_APP_BACKEND_URL;
+}
 </script>
 
 <style scoped>
