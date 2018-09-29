@@ -1,0 +1,12 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name api.readit.cool www.api.readit.cool;
+
+        location / {
+                include uwsgi_params;
+#                uwsgi_pass unix:///tmp/api.readit.sock;
+                uwsgi_pass 127.0.0.1:3031;
+        }
+}
