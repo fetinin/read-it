@@ -11,6 +11,7 @@ chardet = "*"
 bleach = "*"
 dnspython = "*"
 sentry-sdk = "*"
+pyjwt = "*"
 
 [dev-packages]
 pytest = "*"
