@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
 
 import jwt
 from apistar import http
@@ -16,7 +16,6 @@ OAUTH_URLS = {
         "query": {
             "client_id": "6684417",
             "display": "page",
-            "redirect_uri": "http://localhost:5000/auth/vk",
             "response_type": "code",
             "v": "5.84",
         },
@@ -26,7 +25,6 @@ OAUTH_URLS = {
         "query": {
             "client_id": "114302730103-6mjed5701n57tajalsqk280eg2u11m33.apps.googleusercontent.com",
             "scope": "https://www.googleapis.com/auth/userinfo.profile",
-            "redirect_uri": "http://localhost:5000/auth/google",
             "response_type": "code",
             "include_granted_scopes": "true",
             "access_type": "online",
@@ -34,31 +32,30 @@ OAUTH_URLS = {
     },
     "github": {
         "url": "https://github.com/login/oauth/authorize",
-        "query": {
-            "client_id": "ac99328569221f9822bc",
-            "redirect_url": "http://localhost:5000/auth/github",
-            "scope": "read:user",
-        },
+        "query": {"client_id": "ac99328569221f9822bc", "scope": "read:user"},
     },
 }
 
 
-def auth_user(auth_service_name: str, code: http.QueryParam):
+def auth_user(auth_service_name: str, code: http.QueryParam, route_url: http.URL):
+    route_url = route_url.split("?")[0]
     if not code and auth_service_name != AuthTypes.guest.name:
         # redirect to oauth service
         try:
-            auth_path: dict = OAUTH_URLS[auth_service_name]
+            auth_params: dict = OAUTH_URLS[auth_service_name]
         except KeyError:
             raise NotFound()
-        query = urlencode(auth_path["query"])
-        return redirect(f"{auth_path['url']}?{query}")
+        auth_query_params = auth_params["query"].copy()
+        auth_query_params["redirect_uri"] = route_url
+        query = urlencode(auth_query_params)
+        return redirect(f"{auth_params['url']}?{query}")
 
     try:
         auth_type = AuthTypes[auth_service_name]
     except KeyError:
         raise BadRequest(f"Invalid auth type. Must be one of {AuthTypes.options()}")
 
-    auth_client = AuthClient(auth_type, code)
+    auth_client = AuthClient(auth_type, code, route_url)
     user = User.find_external(auth_client.user_id, auth_type.value)
     if not user:
         user = User(
@@ -71,7 +68,7 @@ def auth_user(auth_service_name: str, code: http.QueryParam):
         user.save()
     token = jwt.encode({"userID": str(user.id)}, key=settings.Secrets.jwt_sign)
     query = urlencode({"access_token": token.decode("utf-8")})
-    return redirect(f"http://localhost:8080/authenticated?{query}")
+    return redirect(f"{settings.Server.frontend_server_url}/authenticated?{query}")
 
 
 def get_user(user: components.User) -> schema.User:

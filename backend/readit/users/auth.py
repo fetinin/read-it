@@ -25,8 +25,8 @@ class AuthTypes(IntEnum):
 class AuthClient:
     _clients: Dict[AuthTypes, Type[AuthClientBase]] = {}
 
-    def __init__(self, service: AuthTypes, code: str) -> None:
-        self._client = self._clients[service](code)
+    def __init__(self, service: AuthTypes, code: str, redirect_url: str) -> None:
+        self._client = self._clients[service](code, redirect_url)
 
     def __getattr__(self, item):
         return getattr(self._client, item)
@@ -39,7 +39,8 @@ class AuthClient:
 class AuthClientBase:
     service_type: ClassVar[AuthTypes]
 
-    def __init__(self, code: str) -> None:
+    def __init__(self, code: str, redirect_url: str) -> None:
+        self.redirect_url = redirect_url
         self.code = code
         self.user_id: str
         self.token: str
@@ -54,8 +55,8 @@ class VKClient(AuthClientBase):
     service_type = AuthTypes.vk
     api_version: ClassVar[str] = "5.84"
 
-    def __init__(self, code: str) -> None:
-        super().__init__(code)
+    def __init__(self, code: str, redirect_url: str) -> None:
+        super().__init__(code, redirect_url)
         self.user_id, self.token = self._init_token()
         self._user: Optional[User] = None
 
@@ -65,7 +66,7 @@ class VKClient(AuthClientBase):
             params={
                 "client_id": "6684417",
                 "client_secret": settings.Secrets.vk_app,
-                "redirect_uri": "http://localhost:5000/auth/vk",  # todo: получать из вне?
+                "redirect_uri": self.redirect_url,
                 "code": self.code,
             },
         )
@@ -98,8 +99,8 @@ class VKClient(AuthClientBase):
 class GoogleClient(AuthClientBase):
     service_type = AuthTypes.google
 
-    def __init__(self, code: str) -> None:
-        super().__init__(code)
+    def __init__(self, code: str, redirect_url: str) -> None:
+        super().__init__(code, redirect_url)
         self.token = self._init_token()
         self.user: User = self._get_user()
         self.user_id = self.user.id
@@ -111,7 +112,7 @@ class GoogleClient(AuthClientBase):
                 "code": self.code,
                 "client_id": "114302730103-6mjed5701n57tajalsqk280eg2u11m33.apps.googleusercontent.com",
                 "client_secret": settings.Secrets.google_app,
-                "redirect_uri": "http://localhost:5000/auth/google",  # todo: получать из вне?
+                "redirect_uri": self.redirect_url,
                 "grant_type": "authorization_code",
             },
         )
@@ -140,8 +141,8 @@ class GoogleClient(AuthClientBase):
 class GithubClient(AuthClientBase):
     service_type = AuthTypes.github
 
-    def __init__(self, code: str) -> None:
-        super().__init__(code)
+    def __init__(self, code: str, redirect_url: str) -> None:
+        super().__init__(code, redirect_url)
         self.token = self._init_token()
         self.user: User = self._get_user()
         self.user_id = self.user.id
@@ -153,7 +154,7 @@ class GithubClient(AuthClientBase):
                 "client_id": "ac99328569221f9822bc",
                 "client_secret": settings.Secrets.github_app,
                 "code": self.code,
-                "redirect_url": "http://localhost:5000/auth/github",
+                "redirect_url": self.redirect_url,
             },
             headers={"Accept": "application/json"},
         )
@@ -175,8 +176,8 @@ class GithubClient(AuthClientBase):
 class GuestClient(AuthClientBase):
     service_type = AuthTypes.guest
 
-    def __init__(self, code: str) -> None:
-        super().__init__(code)
+    def __init__(self, code: str, redirect_url: str) -> None:
+        super().__init__(code, redirect_url)
         self.token = "guest"
         self.user: User = self._get_user()
         self.user_id = self.user.id
