@@ -45,12 +45,7 @@ def update_book(
 
 
 def create_book(book_data: schema.BookWithFile, user: User) -> schema.HasID:
-    import datetime
-
-    now = datetime.datetime.now()
-    print(now)
     pages = Converter(book_data.format).convert(base64.b64decode(book_data.file))
-    print("Took %s", datetime.datetime.now() - now)
     book = Book(
         title=book_data.title,
         author=book_data.author,
