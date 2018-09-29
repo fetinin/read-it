@@ -7,7 +7,6 @@ import router from './router';
 import store from './store';
 import Book from './views/Book.vue';
 import Books from './views/Books.vue';
-import Home from './views/Home.vue';
 import Signup from './views/Signup.vue';
 import UploadBook from './views/UploadBook.vue';
 
@@ -19,13 +18,9 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
-    },
-    {
-      path: '/books',
       name: 'books',
       component: Books,
+      alias: '/books',
     },
     {
       path: '/signup',
@@ -68,6 +63,10 @@ export default new Router({
         }
         goToNextPage();
       },
+    },
+    {
+      path: '*',
+      redirect: { name: 'books' },
     },
   ],
 });

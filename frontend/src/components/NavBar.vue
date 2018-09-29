@@ -1,8 +1,8 @@
 <template>
 <header v-if="user" class="navbar">
   <section class="navbar-section">
-    <router-link class="btn btn-link" to='/books'><img src="@/assets/icons/book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Книги</span></router-link>
-    <router-link class="btn btn-link" to='/upload-book'><img src="@/assets/icons/add_book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Добавить книгу</span></router-link>
+    <router-link class="btn btn-link" :to="{name: 'books'}"><img src="@/assets/icons/book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Книги</span></router-link>
+    <router-link class="btn btn-link" :to="{name: 'uploadBook'}"><img src="@/assets/icons/add_book_60x60.png" alt="book" class="img-icon bg-blue"><span class="hide-xs">Добавить книгу</span></router-link>
   </section>
   <section class="navbar-center"><img src="@/assets/logo.png" alt="ReadIT logo" class="img-responsive"></section>
   <section class="navbar-section">
