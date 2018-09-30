@@ -1,0 +1,12 @@
+[Unit]
+Description=ReadIT
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/denis/apps/readit
+ExecStart=/usr/local/bin/uwsgi /home/denis/apps/readit/uwsgi.ini
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

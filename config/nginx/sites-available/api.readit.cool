@@ -1,0 +1,35 @@
+server {
+
+#        root /var/www/readit.cool/html;
+#        index index.html index.htm;
+
+        server_name api.readit.cool www.api.readit.cool;
+
+        location / {
+                include uwsgi_params;
+#                uwsgi_pass unix:///tmp/api.readit.sock;
+                uwsgi_pass 127.0.0.1:3031;
+        }
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/readit.cool/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/readit.cool/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = api.readit.cool) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+        server_name api.readit.cool www.api.readit.cool;
+    return 404; # managed by Certbot
+
+
+}
