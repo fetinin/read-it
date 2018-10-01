@@ -66,4 +66,9 @@ div.user > * {
 .navbar-no-user {
   justify-content: center;
 }
+.menu {
+  min-width: 50px;
+  right: 0;
+  left: initial;
+}
 </style>

@@ -1,0 +1,53 @@
+server {
+
+        root /var/www/readit.cool/html;
+        index index.html index.htm;
+
+        server_name readit.cool www.readit.cool;
+
+        location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+                expires max;
+                add_header Pragma public;
+                add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        }
+
+        location / {
+                try_files $uri $uri/ @rewrites;
+        }
+
+       
+
+        location @rewrites {
+                rewrite ^(.+)$ /index.html last;
+        }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/readit.cool/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/readit.cool/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.readit.cool) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = readit.cool) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+        server_name readit.cool www.readit.cool;
+    return 404; # managed by Certbot
+
+
+
+
+}

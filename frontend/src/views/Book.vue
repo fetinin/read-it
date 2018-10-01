@@ -1,10 +1,18 @@
 <template>
     <div v-if='book !== null' class="book container" v-touch:swipe="handleSwipe">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
-          <p class="title">{{book.title}} - {{book.author}}</p>
-          <transition name="fade-page" mode="out-in">
-            <p class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></p>
-          </transition>
+          <p class="title hide-sm">{{book.title}} - {{book.author}}</p>
+
+            <transition name="fade-page" mode="out-in">
+              <div
+               class="page"
+               v-html="book.pages[currentPage - 1]" :key="currentPage"
+               v-touch:tap="handleTap"
+               ref="page">
+            </div>
+            </transition>
+            
+          
           <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
       </div>
     </div>
@@ -38,15 +46,17 @@ export default class BookView extends Vue {
     return 0;
   }
 
-  public nextPage() {
+  public goNextPage() {
     if (this.currentPage < this.pageTotal) {
       this.currentPage += 1;
+      (this.$refs.page as Element).scrollTop = 0;
     }
   }
 
-  public prevPage() {
+  public goPrevPage() {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
+      (this.$refs.page as Element).scrollTop = 0;
     }
   }
 
@@ -69,21 +79,31 @@ export default class BookView extends Vue {
     // console.log(evt);
   }
 
+  private handleTap(event: TouchEvent) {
+    const element = event.srcElement as Element;
+    const xPosition = event.changedTouches[0].clientX;
+    if (element.clientWidth / 2 < xPosition) {
+      this.goNextPage();
+    } else {
+      this.goPrevPage();
+    }
+  }
+
   private handleSwipe(direction: string) {
     if (direction === 'left') {
-      this.nextPage();
+      this.goNextPage();
     } else if (direction === 'right') {
-      this.prevPage();
+      this.goPrevPage();
     }
   }
 
   private handleKeyPress(evt: KeyboardEvent) {
     if (evt.key === 'ArrowRight') {
       evt.preventDefault();
-      this.nextPage();
+      this.goNextPage();
     } else if (evt.key === 'ArrowLeft') {
       evt.preventDefault();
-      this.prevPage();
+      this.goPrevPage();
     }
   }
 
@@ -124,8 +144,12 @@ export default class BookView extends Vue {
 <style>
 /* Styles are not scoped due to the fact that scoped styles are not applied to raw html */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+.title,
+.page-count {
+  margin-bottom: 0.1rem;
+}
 .pages {
-  height: 90vh;
+  height: 100%;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;
@@ -137,6 +161,10 @@ export default class BookView extends Vue {
   width: 100%;
   height: 100%;
   max-width: 960px;
+  font-size: 1rem;
+}
+.page-count {
+  color: #acb3c2;
 }
 .page img {
   max-width: 100%;
