@@ -16,7 +16,7 @@ class Secrets:
 
 
 class Server:
-    host = "192.168.1.121"
-    port = 5000
+    host = os.environ.get("SERVER_HOST", "localhost")
+    port = int(os.environ.get("SERVER_PORT", 5000))
     in_debug: bool = os.environ.get("APP_DEBUG", "false").lower() == "true"
     frontend_server_url = os.environ.get("FRONTEND_URL", "http://localhost:8080")
