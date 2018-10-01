@@ -3,7 +3,7 @@
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title">{{book.title}} - {{book.author}}</p>
           <transition name="fade-page" mode="out-in">
-            <p class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></p>
+            <div class="page" v-html="book.pages[currentPage - 1]" :key="currentPage"></div>
           </transition>
           <p class="page-count">{{ currentPage }} / {{ pageTotal }}</p>
       </div>
@@ -124,8 +124,12 @@ export default class BookView extends Vue {
 <style>
 /* Styles are not scoped due to the fact that scoped styles are not applied to raw html */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+.title,
+.page-count {
+  margin-bottom: 0.1rem;
+}
 .pages {
-  height: 90vh;
+  height: 100%;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;

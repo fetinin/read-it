@@ -35,7 +35,7 @@ export default class App extends Vue {}
 }
 #page-content {
   display: flex;
-  height: 90vh;
+  height: calc(100vh - 70px);
 }
 .text-grey {
   color: #acb3c2;
