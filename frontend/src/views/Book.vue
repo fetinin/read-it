@@ -1,7 +1,7 @@
 <template>
     <div v-if='book !== null' class="book container" v-touch:swipe="handleSwipe">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
-          <p class="title">{{book.title}} - {{book.author}}</p>
+          <p class="title hide-sm">{{book.title}} - {{book.author}}</p>
 
             <transition name="fade-page" mode="out-in">
               <div
@@ -161,6 +161,10 @@ export default class BookView extends Vue {
   width: 100%;
   height: 100%;
   max-width: 960px;
+  font-size: 1rem;
+}
+.page-count {
+  color: #acb3c2;
 }
 .page img {
   max-width: 100%;
