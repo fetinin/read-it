@@ -118,7 +118,7 @@ export default class BookUpload extends Vue {
       fileExtension !== undefined &&
       !this.supportedBookFormats.includes(fileExtension.toLowerCase())
     ) {
-      this.$snotify.warning('Этот формат книги пока не поддерижвается.');
+      this.$snotify.warning('Этот формат книги не поддерживается.');
       return;
     }
     this.bookFile.name = file.name;
