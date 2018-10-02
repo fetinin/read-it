@@ -1,5 +1,5 @@
 <template>
-    <div v-if='book !== null' class="book container" v-touch:swipe="handleSwipe">
+    <div v-if='book !== null' class="book container">
         <div class="pages col-mx-auto" @wheel="handleScroll" ref="content">
           <p class="title hide-sm">{{book.title}} - {{book.author}}</p>
 
@@ -8,6 +8,7 @@
                class="page"
                v-html="book.pages[currentPage - 1]" :key="currentPage"
                v-touch:tap="handleTap"
+               v-touch:swipe="handleSwipe"
                ref="page">
             </div>
             </transition>
@@ -82,10 +83,11 @@ export default class BookView extends Vue {
   private handleTap(event: TouchEvent) {
     const element = event.srcElement as Element;
     const xPosition = event.changedTouches[0].clientX;
-    if (element.clientWidth / 2 < xPosition) {
-      this.goNextPage();
-    } else {
+    const oneThirdWidth = element.clientWidth / 3;
+    if (xPosition <= oneThirdWidth) {
       this.goPrevPage();
+    } else if (xPosition >= oneThirdWidth * 2) {
+      this.goNextPage();
     }
   }
 
