@@ -163,8 +163,8 @@ class _PDFConverter:
         with tempfile.TemporaryDirectory() as tmp_dir:
             out_html = cls._extract_content(data, to=tmp_dir)
             images = cls._extract_images_content(tmp_dir)
-            out_html = cls._insert_images(out_html, images).decode("utf-8")
-        pages = cls._split_html(out_html)
+            out_html = cls._insert_images(out_html, images)
+        pages = cls._split_html(out_html.decode("utf-8"))
         return pages
 
 
