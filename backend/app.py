@@ -1,29 +1,26 @@
-from apistar import App
-from apistar_cors import CORSMixin
+from molten import App
+from wsgicors import CORS
 
 from readit import settings
 from readit.books.routes import routes as book_routes
-from readit.components import UserComponent
 from readit.db import db_init
-from readit.event_hooks import hooks
-from readit.sentry import init_sentry
+
 from readit.users.routes import routes as user_routes
-
-
-class AppCORS(CORSMixin, App):
-    pass
-
+from readit.components import UserComponent
 
 routes = book_routes + user_routes
-components = [UserComponent()]
 
-app = AppCORS(routes=routes, event_hooks=hooks, components=components)
-
+app = App(routes=routes, components=[UserComponent()])
 
 if __name__ == "__main__":
+    import werkzeug
+
+    options = {
+        "hostname": settings.Server.host,
+        "port": settings.Server.port,
+        "use_debugger": True,
+        "use_reloader": True,
+    }
     db_init()
-    if not settings.Server.in_debug:
-        init_sentry()
-    app.serve(
-        settings.Server.host, settings.Server.port, debug=settings.Server.in_debug
-    )
+    cors_app = CORS(app, headers="*", methods="*", origin="*", maxage="86400")
+    werkzeug.run_simple(application=cors_app, **options)

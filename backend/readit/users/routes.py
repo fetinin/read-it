@@ -1,8 +1,8 @@
-from apistar import Route
+from molten import Route
 
 from . import views
 
 routes = [
-    Route("/auth/{auth_service_name}", "GET", views.auth_user),
-    Route("/users/{user_id}", "GET", views.get_user),
+    Route("/auth/{auth_service_name}", views.auth_user, "GET"),
+    Route("/users/{user_id}", views.get_user, "GET"),
 ]

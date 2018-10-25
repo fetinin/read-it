@@ -1,33 +1,44 @@
 import logging
+from inspect import Parameter
+from typing import Optional
 
 import jwt
+from molten import HTTPError, HTTP_401, HTTP_403, Header
 
-from apistar import exceptions, http
-from apistar.server.components import Component
 from readit.settings import Secrets
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
-class User(object):
+class User:
     def __init__(self, id_: str) -> None:
         self.id = id_
 
+    @classmethod
+    def from_token(cls, token: str):
+        data = jwt.decode(token, key=Secrets.jwt_sign)
+        return cls(id_=data["userID"])
 
-class UserComponent(Component):
-    def resolve(self, authentication: http.Header) -> User:
+    def as_token(self):
+        return jwt.encode({"userID": self.id}, key=Secrets.jwt_sign)
+
+
+class UserComponent:
+    is_cacheable = True
+    is_singleton = False
+
+    def can_handle_parameter(self, parameter: Parameter) -> bool:
+        return parameter.annotation is User
+
+    def resolve(self, authentication: Optional[Header]) -> User:
         """
         Determine the user associated with a request
         """
         if authentication is None:
-            raise exceptions.HTTPException("Authorization header is required.", 401)
+            raise HTTPError(HTTP_401, {"error": "Authorization header is required."})
 
         try:
-            return self.get_user(authentication)
+            return User.from_token(authentication)
         except Exception as err:
-            logger.error(f"Failed to parse token: {err}")
-            raise exceptions.Forbidden("Incorrect token.")
-
-    def get_user(self, token: str) -> User:
-        data = jwt.decode(token, key=Secrets.jwt_sign)
-        return User(id_=data["userID"])
+            LOGGER.error(f"Failed to parse token: {err}")
+            raise HTTPError(HTTP_403, {"error": "Incorrect token."})

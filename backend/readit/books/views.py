@@ -1,14 +1,13 @@
 import base64
-
-from apistar import http
-
 from typing import List
 
-from apistar.exceptions import NotFound
-from .convertor import Converter
-from . import schema
-from .models import Book
+from molten import RequestData, http, HTTP_404
+from molten.errors import HTTPError
+
 from readit.components import User
+from . import schema
+from .convertor import Converter
+from .models import Book
 
 
 def list_books(user: User) -> List[schema.BookNoContent]:
@@ -21,11 +20,11 @@ def list_books(user: User) -> List[schema.BookNoContent]:
     ]
 
 
-def get_book(book_id: str, user: User) -> schema.Book:
+def get_book(book_id: str, user: User) -> schema.BookContent:
     book = Book.get_user_book(book_id, owner_id=user.id)
     if not book:
-        raise NotFound()
-    return schema.Book(
+        raise HTTPError(http.HTTP_404)
+    return schema.BookContent(
         id=str(book.id),
         title=book.title,
         author=book.author,
@@ -35,16 +34,14 @@ def get_book(book_id: str, user: User) -> schema.Book:
     )
 
 
-def update_book(
-    book_id: str, book_schema: schema.BookFields, r_data: http.RequestData, user: User
-):
+def update_book(book_id: str, r_data: RequestData, user: User):
     book = Book.get_user_book(book_id, owner_id=user.id)
     if not book:
-        raise NotFound()
+        raise HTTPError(http.HTTP_404)
     book.update(pk=book_id, **r_data)
 
 
-def create_book(book_data: schema.BookWithFile, user: User) -> schema.HasID:
+def create_book(book_data: schema.BookWithFile, user: User) -> schema.WithID:
     pages = Converter(book_data.format).convert(base64.b64decode(book_data.file))
     book = Book(
         title=book_data.title,
@@ -54,11 +51,11 @@ def create_book(book_data: schema.BookWithFile, user: User) -> schema.HasID:
         owner_id=user.id,
     )
     book.save()
-    return schema.HasID(id=str(book.id))
+    return schema.WithID(id=str(book.id))
 
 
 def delete_book(book_id: str, user: User):
     book = Book.get_user_book(book_id, user.id)
     if not book:
-        raise NotFound()
+        raise HTTPError(HTTP_404)
     book.delete()
