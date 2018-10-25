@@ -2,6 +2,8 @@ from typing import List, Optional
 
 from molten import Field, schema
 
+from readit.books.convertor import Converter
+
 
 @schema
 class WithID:
@@ -18,9 +20,11 @@ class BookNoContent(WithID):
 @schema
 class BookWithFile(BookNoContent):
     file: str = Field(description="Book content as base64 string.", request_only=True)
-    # todo: add choices? It's better to validate supported formats here
-    # (https://trello.com/c/uOiV0slb)
-    format: str = Field(description="Book format.", request_only=True)
+    format: str = Field(
+        description="Book format.",
+        request_only=True,
+        choices=Converter.supported_formats,
+    )
 
 
 @schema

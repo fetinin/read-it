@@ -31,3 +31,17 @@ def test_list_books(authorized_client, books_factory):
     resp = authorized_client.get(app.reverse_uri("list_books"))
     assert resp.status_code == 200
     assert len(resp.json()) == len(books)
+
+
+def test_create_book_invalid_format(authorized_client):
+    body = {
+        "title": "Code Complete",
+        "author": "Steve McConel",
+        "cover": "data:image/png:base64,data:image/png;base64,iVBORw0KGgo...",
+        "file": "iVBORw0KGgoweartQW==",
+        "format": "jpg",
+    }
+    response = authorized_client.post(app.reverse_uri("create_book"), json=body)
+    assert response.status_code == 400
+    assert "errors" in response.json()
+    assert "format" in response.json()["errors"]

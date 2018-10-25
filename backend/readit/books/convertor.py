@@ -12,7 +12,7 @@ from zipfile import ZipFile
 import bleach
 from chardet import UniversalDetector
 
-from readit.helpers import sliced
+from readit.helpers import sliced, classproperty
 
 
 class UnsupportedFormatError(Exception):
@@ -58,7 +58,7 @@ class Converter:
         except KeyError:
             raise UnsupportedFormatError(
                 f"{converter_type} format is not supported. "
-                f"Choose one of: {self._converters.keys()}."
+                f"Choose one of: {self.supported_formats}."
             )
 
     @classmethod
@@ -79,6 +79,10 @@ class Converter:
         pages = self.converter.convert(content)
         safe_pages = (self._sanitize(page) for page in pages)
         return [page for page in safe_pages if page]
+
+    @classproperty
+    def supported_formats(cls) -> List[str]:
+        return list(cls._converters.keys())
 
 
 @Converter.add_converter("txt")

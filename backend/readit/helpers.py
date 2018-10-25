@@ -20,3 +20,13 @@ def sliced(seq, n):
 
     """
     return takewhile(bool, (seq[i : i + n] for i in count(0, n)))
+
+
+class classproperty:
+    """ @classmethod+@property """
+
+    def __init__(self, f):
+        self.f = f
+
+    def __get__(self, instance, owner):
+        return self.f(owner)
