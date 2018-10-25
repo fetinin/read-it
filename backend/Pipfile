@@ -4,19 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-apistar = "==0.5.42"
 mongoengine = "*"
-apistar-cors = "*"
 chardet = "*"
 bleach = "*"
 dnspython = "*"
 sentry-sdk = "*"
 pyjwt = "*"
+molten = "*"
 
 [dev-packages]
 pytest = "*"
 black = "*"
 mypy = "*"
+gunicorn = "*"
+mongomock = "*"
+factory-boy = "*"
 
 [requires]
 python_version = "3.7"

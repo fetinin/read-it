@@ -1,8 +1,9 @@
-from apistar import types, validators
+from molten import schema
 
 
-class User(types.Type):
-    id = validators.String()
-    name = validators.String()
-    surname = validators.String()
-    avatar = validators.String()
+@schema
+class User:
+    id: str
+    name: str
+    surname: str
+    avatar: str
