@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL;
-axios.defaults.timeout = 10000; // ms
+axios.defaults.timeout = 30000; // ms
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
